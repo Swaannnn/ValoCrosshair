@@ -1,4 +1,4 @@
-import ToggleButton from '@components/ToggleButton.tsx'
+import ToggleButton from '@/components/ToggleButton.tsx'
 
 type ValuesProps = {
     label: string,
@@ -12,7 +12,7 @@ type FilterButtonProps = {
 }
 
 const FilterButtons = ({ values, selectedValue, onChange }: FilterButtonProps) => (
-    <div style={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
+    <div style={{ display: 'flex', gap: '1rem' }}>
         {values.map(value => (
             <label key={value.value} style={{ display: 'block' }}>
                 <ToggleButton

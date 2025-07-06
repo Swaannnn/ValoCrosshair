@@ -6,7 +6,8 @@ import i18n from './simple-react-i18n.ts'
 import fr from '@/assets/i18n/properties_fr.json'
 import en from '@/assets/i18n/properties_en.json'
 
-type I18nJson = Record<string, any>
+type I18nValue = string | number | boolean | Record<string, unknown>
+type I18nJson = Record<string, I18nValue>
 
 type LanguageProperty = {
     code: string

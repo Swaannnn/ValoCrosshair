@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react'
-import { mainWhite, mainBlack, mainGrey } from '@constants/colors'
-import { mediumRadius } from '@constants/sizes.ts'
+import { mainWhite, mainBlack, mainGrey } from '@/constants/colors'
+import { mediumRadius } from '@/constants/sizes.ts'
 
 type ToastProps = {
 	children: ReactNode

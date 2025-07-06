@@ -1,20 +1,24 @@
 import { type CSSProperties, type ReactNode, useState } from 'react'
 import { darkRed1, lightRed, mainBlack, mainGrey, mainRed, mainWhite } from '@/constants/colors.ts'
 import { mediumRadius } from '@/constants/sizes.ts'
+import Text from '@components/Text.tsx'
 
 type Variant = 'primary' | 'secondary' | 'outlined'
 
 type ButtonProps = {
-	variant?: Variant
+	variant?: Variant,
 	children: ReactNode,
 	onClick?: () => void,
+	startIcon?: ReactNode,
 	endIcon?: ReactNode,
+    fullWidth?: boolean,
+    loading?: boolean,
 }
 
 const getButtonStyle = (
     variant: Variant,
     isHovered: boolean,
-    isActive: boolean
+    isActive: boolean,
 ): CSSProperties => {
     switch (variant) {
     case 'primary':
@@ -40,26 +44,45 @@ const getButtonStyle = (
     }
 }
 
-const Button = ({ variant = 'primary', children, onClick, endIcon }: ButtonProps) => {
+const spinnerStyle = {
+    border: '2px solid #f3f3f3',
+    borderTop: '2px solid #333',
+    borderRadius: '50%',
+    width: '16px',
+    height: '16px',
+    animation: 'spin 0.8s linear infinite',
+}
+
+const Button = ({
+    variant = 'primary',
+    children,
+    onClick,
+    startIcon,
+    endIcon,
+    fullWidth = false,
+    loading = false
+}: ButtonProps) => {
     const [isHovered, setHovered] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
     const variantStyle = getButtonStyle(variant, isHovered, isActive)
 
+    const fullWidthStyle: CSSProperties = {
+        width: fullWidth ? '100%' : 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+
     return (
         <button
             onClick={onClick}
             style={{
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '0.5rem',
+                cursor: loading ? 'not-allowed' : 'pointer',
                 borderRadius: mediumRadius,
                 padding: '0.3rem 1rem',
                 transition: 'all 150ms ease-in-out',
-                fontWeight: 600,
-                fontFamily: '"Open Sans", sans-serif',
+                ...(fullWidth ? fullWidthStyle : {}),
                 ...variantStyle
             }}
             onMouseEnter={() => setHovered(true)}
@@ -69,8 +92,15 @@ const Button = ({ variant = 'primary', children, onClick, endIcon }: ButtonProps
                 setIsActive(false)
             }}
             onMouseUp={() => setIsActive(false)}
+            disabled={loading}
         >
-            {children} {endIcon}
+            {loading ? (
+                <div style={spinnerStyle} />
+            ) : (
+                <Text color='inherit'>
+                    {startIcon} {children} {endIcon}
+                </Text>
+            )}
         </button>
     )
 }

@@ -1,6 +1,8 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 @font-face {
@@ -10,6 +12,52 @@
     src: local('VALORANT'), url('https://fonts.cdnfonts.com/s/37505/Valorant Font.woff') format('woff');
 }
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes smoothProgress {
+    0% {
+        left: 0;
+        width: 10%;
+    }
+    50% {
+        left: 20%;
+        width: 40%;
+    }
+    100% {
+        left: 100%;
+        width: 20%;
+    }
+}
+
+:root {
+    --blue-link: #007BFF;
+}
+
 body {
     font-family: "Open Sans", sans-serif;
+}
+
+.animated-link {
+    position: relative;
+    color: var(--blue-link);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.animated-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background-color: var(--blue-link);
+    transition: width 0.3s ease;
+}
+
+.animated-link:hover::after {
+    width: 100%;
 }

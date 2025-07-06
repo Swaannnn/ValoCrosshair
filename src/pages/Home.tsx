@@ -1,8 +1,6 @@
 import crosshairs from '@/data/crosshairs.json'
 import Crosshair from '@/components/Crosshair.tsx'
-import { lightGrey } from '@/constants/colors.ts'
-import { headerHeight } from '@/constants/sizes.ts'
-import FilterButtons from '@components/FilterButtons.tsx'
+import FilterButtons from '@/components/FilterButtons.tsx'
 import { useState } from 'react'
 import i18n from '@/simple-react-i18n.ts'
 
@@ -17,12 +15,7 @@ const Home = () => {
     const [type, setType] = useState('all')
 
     return (
-        <div
-            style={{
-                backgroundColor: lightGrey,
-                minHeight: `calc(100vh - ${headerHeight})`,
-            }}
-        >
+        <div style={{ padding: '1rem' }}>
             <FilterButtons
                 values={filterValues}
                 selectedValue={type}
@@ -30,9 +23,9 @@ const Home = () => {
             />
             <div
                 style={{
-                    padding: '1rem',
                     display: 'flex',
                     gap: '1rem',
+                    paddingTop: '1rem',
                 }}
             >
                 {crosshairs
