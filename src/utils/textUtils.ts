@@ -1,11 +1,5 @@
-const copyText = (text: string) => {
-    navigator.clipboard.writeText(text)
-        .then(() => {
-            console.log('Texte copié !')
-        })
-        .catch(err => {
-            console.error('Erreur lors de la copie :', err)
-        })
+const copyText = (text: string): Promise<void> => {
+    return navigator.clipboard.writeText(text)
 }
 
 export { copyText }

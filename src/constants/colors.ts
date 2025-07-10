@@ -1,4 +1,5 @@
 const mainBlack = '#000'
+const mainBlack80 = '#000000CC'
 const lightBlack = '#161A1D'
 const mainWhite = '#fff'
 
@@ -20,6 +21,7 @@ const greenValidation = '#43A047'
 
 export {
     mainBlack,
+    mainBlack80,
     lightBlack,
     mainWhite,
     darkRed2,

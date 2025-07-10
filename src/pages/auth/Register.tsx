@@ -28,7 +28,7 @@ const Register = () => {
             if (data.session) navigate('/account')
         }
         checkSession()
-    }, [])
+    })
 
     const handleEmailRegister = async (e: FormEvent) => {
         e.preventDefault()
@@ -102,7 +102,6 @@ const Register = () => {
                                 setEmailError('')
                             }}
                             error={emailError}
-                            required
                         />
 
                         <TextField
@@ -115,7 +114,6 @@ const Register = () => {
                                 setPasswordError('')
                             }}
                             error={passwordError}
-                            required
                         />
                     </div>
 

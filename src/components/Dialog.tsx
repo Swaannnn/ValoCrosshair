@@ -1,18 +1,46 @@
 import Text from '@components/Text.tsx'
 import Button from '@components/Button.tsx'
-import i18n from '@/simple-react-i18n.ts'
 import { mainWhite } from '@constants/colors.ts'
 import { mediumRadius } from '@constants/sizes.ts'
+import React, { useEffect, useRef } from 'react'
 
 type DialogProps = {
     title: string,
-    content: string,
-    onButtonClick: () => void,
+    children: React.ReactNode,
     buttonText: string,
-    onClose?: () => void,
+    onButtonClick: () => void,
+    secondaryButtonText?: string,
+    onSecondaryButtonClick?: () => void,
+    horizontalButtons?: boolean,
 }
 
-const Dialog = ({ title, content, onButtonClick, buttonText, onClose }: DialogProps) => {
+const Dialog = ({
+    title,
+    children,
+    buttonText,
+    onButtonClick,
+    secondaryButtonText,
+    onSecondaryButtonClick,
+    horizontalButtons = false,
+}: DialogProps) => {
+    const dialogRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dialogRef.current &&
+                !dialogRef.current.contains(event.target as Node)
+            ) {
+                onSecondaryButtonClick?.()
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [onSecondaryButtonClick])
+
     return (
         <div
             style={{
@@ -25,29 +53,36 @@ const Dialog = ({ title, content, onButtonClick, buttonText, onClose }: DialogPr
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                zIndex: 9999,
             }}
         >
             <div
+                ref={dialogRef}
                 style={{
                     backgroundColor: mainWhite,
                     padding: '1rem',
                     borderRadius: mediumRadius,
-
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: '1rem',
+                    zIndex: 10000,
                 }}
             >
                 <Text size='lg' weight='bold'>{title}</Text>
-                <Text>{content}</Text>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                {children}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: horizontalButtons ? 'row' : 'column',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                }}>
                     <Button onClick={onButtonClick}>
                         {buttonText}
                     </Button>
-                    {onClose &&
-                        <Button variant='outlined' onClick={onClose}>
-                            {i18n.close}
+                    {secondaryButtonText &&
+                        <Button variant='outlined' onClick={onSecondaryButtonClick}>
+                            {secondaryButtonText}
                         </Button>
                     }
                 </div>

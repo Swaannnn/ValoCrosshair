@@ -5,7 +5,7 @@ const roundedRadius = '64px'
 
 const headerHeight = '64px'
 const bannerHeight = '384px'
-const avatarHeight = '192px'
+const avatarSize = '256px'
 
 export {
     smallRadius,
@@ -14,5 +14,5 @@ export {
     roundedRadius,
     headerHeight,
     bannerHeight,
-    avatarHeight,
+    avatarSize,
 }

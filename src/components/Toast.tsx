@@ -1,19 +1,21 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import { mainWhite, mainBlack, mainGrey } from '@/constants/colors'
 import { mediumRadius } from '@/constants/sizes.ts'
+import Text from '@components/Text.tsx'
 
 type ToastProps = {
-	children: ReactNode
+	message: string
+    icon?: ReactNode
 	onClose: () => void
 	duration?: number
 }
 
-const Toast = ({ children, onClose, duration = 3000 }: ToastProps) => {
+const Toast = ({ message, icon, onClose, duration = 5000 }: ToastProps) => {
     const [disappearing, setDisappearing] = useState(false)
 
     useEffect(() => {
         const timer = setTimeout(() => setDisappearing(true), duration)
-        const cleanup = setTimeout(onClose, duration + 300)
+        const cleanup = setTimeout(onClose, duration + 1000)
         return () => {
             clearTimeout(timer)
             clearTimeout(cleanup)
@@ -36,7 +38,17 @@ const Toast = ({ children, onClose, duration = 3000 }: ToastProps) => {
                 transform: disappearing ? 'translateY(30px)' : 'translateY(0)',
             }}
         >
-            {children}
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                }}
+            >
+                {icon}
+                <Text>{message}</Text>
+            </div>
         </div>
     )
 }

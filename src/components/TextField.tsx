@@ -1,4 +1,6 @@
 import { type ChangeEvent } from 'react'
+import { smallRadius } from '@constants/sizes.ts'
+import { mainGrey, mainRed, mainWhite } from '@constants/colors.ts'
 
 interface TextFieldProps {
     label: string
@@ -7,22 +9,14 @@ interface TextFieldProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void
     error?: string
     placeholder?: string
-    required?: boolean
 }
 
-const TextField = ({
-    label,
-    type = 'text',
-    value,
-    onChange,
-    error,
-    placeholder,
-}: TextFieldProps) => {
+const TextField = ({ label, type = 'text', value, onChange, error, placeholder }: TextFieldProps) => {
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <label
                 htmlFor={label}
-                style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem' }}
+                style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', cursor: 'text' }}
             >
                 {label}
             </label>
@@ -36,14 +30,14 @@ const TextField = ({
                 style={{
                     width: '100%',
                     padding: '0.5rem',
-                    borderRadius: 4,
-                    border: `1px solid ${error ? '#e63946' : '#ccc'}`,
-                    backgroundColor: '#fff',
+                    borderRadius: smallRadius,
+                    border: `1px solid ${error ? mainRed : mainGrey}`,
+                    backgroundColor: mainWhite,
                 }}
             />
 
             {error && (
-                <p style={{ color: '#e63946', fontSize: '0.85rem', marginTop: 4 }}>
+                <p style={{ color: mainRed, fontSize: '0.85rem', marginTop: 4 }}>
                     {error}
                 </p>
             )}

@@ -1,51 +1,34 @@
-import { editUserProfile, getUserBasicInfo, getUserProfile } from '@/utils/user.ts'
-import React, { type FormEvent, useEffect, useState } from 'react'
-import type { UserBasicInfo } from '@/types/user'
-import Card from '@components/Card.tsx'
-import Button from '@components/Button.tsx'
+import { getUserBasicInfo } from '@/utils/user.ts'
+import React, { useEffect, useState } from 'react'
+import type { UserBasicInfo } from '@/types/types'
 import Loader from '@components/Loader.tsx'
 import { useSession } from '@/features/auth/useSession.ts'
-import type { Profile } from '@/types/profile'
 import i18n from '@/simple-react-i18n.ts'
 import Text from '@components/Text.tsx'
 import Link from '@components/Link.tsx'
 import { useLocation } from 'react-router-dom'
 import { headerHeight } from '@constants/sizes.ts'
 import ProfileSection from '@components/account/ProfileSection.tsx'
+import { supabase } from '@/lib/supabaseClient.ts'
+import Dialog from '@components/Dialog.tsx'
+import Card from '@components/Card.tsx'
+import ClipsSection from '@components/account/ClipsSection.tsx'
 
-const sectionIds = ['myProfile', 'myCrosshairs', 'personalInformation']
+const sectionIds = ['myProfile', 'myCrosshairs', 'myClips', 'myPersonalsInformations']
 
 const Account = () => {
     const userId = useSession()
-    const [profile, setProfile] = useState<Profile | null>(null)
-    const [fullName, setFullName] = useState('')
-    const [avatarUrl, setAvatarUrl] = useState('')
-    const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(true)
     const [userBasicInfo, setUserBasicInfo] = useState<UserBasicInfo>()
-    const [editProfile, setEditProfile] = useState(false)
     const routerLocation = useLocation()
     const [activeSection, setActiveSection] = useState<string>('')
+    const [openDialogLogout, setOpenDialogLogout] = useState(false)
 
     useEffect(() => {
         getUserBasicInfo()
             .then(userInfo => setUserBasicInfo(userInfo))
             .finally(() => setLoading(false))
     }, [])
-
-    useEffect(() => {
-        if (!userId) return
-
-        setLoading(true)
-        getUserProfile(userId).then((data) => {
-            if (data) {
-                setProfile(data)
-                setFullName(data.full_name ?? '')
-                setAvatarUrl(data.avatar_url ?? '')
-            }
-            setLoading(false)
-        })
-    }, [userId])
 
     useEffect(() => {
         if (routerLocation.hash) {
@@ -91,16 +74,9 @@ const Account = () => {
         scrollToSection(id)
     }
 
-    const handleEditProfile = async (e: FormEvent) => {
-        e.preventDefault()
-        if (!userId) return
-
-        setLoading(true)
-        const success = await editUserProfile({ id: userId, full_name: fullName, avatar_url: avatarUrl })
-        if (!success) setErrorMsg('Erreur lors de la sauvegarde du profil')
-        else setErrorMsg('')
-        setLoading(false)
-        setEditProfile(false)
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        location.reload()
     }
 
     if (loading) return <Loader />
@@ -127,121 +103,55 @@ const Account = () => {
                             </span>
                         </Link>
                     ))}
+                    <Link
+                        to={'/account'}
+                        onClick={() => setOpenDialogLogout(true)}
+                    >
+                        <span style={{ transition: 'color 0.3s' }}>
+                            {i18n.logout}
+                        </span>
+                    </Link>
                 </div>
             </div>
 
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div id="myProfile">
-                    <ProfileSection profile={profile} userInfos={userBasicInfo} />
+                    {userBasicInfo && (
+                        <ProfileSection userId={userId} userInfos={userBasicInfo}/>
+                    )}
                 </div>
 
                 <div id="myCrosshairs">
                     <Card width="full">
+                        {/* <CrosshairsSection /> */}
                         <Text size="lg" weight="bold">{i18n.myCrosshairs}</Text>
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <p>blablabla</p>
                     </Card>
                 </div>
 
-                <div id="personalInformation">
+                <div id="myClips">
                     <Card width="full">
-                        <Text size="lg" weight="bold">Informations personnelles</Text>
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        {!editProfile && (
-                            <Button onClick={() => setEditProfile(true)}>
-                                modifier le profil
-                            </Button>
-                        )}
-                        {editProfile && (
-                            <form onSubmit={handleEditProfile}>
-                                <label>
-                                    Nom complet
-                                    <input
-                                        type="text"
-                                        value={fullName}
-                                        onChange={e => setFullName(e.target.value)}
-                                        disabled={loading}
-                                    />
-                                </label>
+                        <ClipsSection userId={userId} />
+                    </Card>
+                </div>
 
-                                <label>
-                                    URL Avatar
-                                    <input
-                                        type="text"
-                                        value={avatarUrl}
-                                        onChange={e => setAvatarUrl(e.target.value)}
-                                        disabled={loading}
-                                    />
-                                </label>
-
-                                <button type="submit" disabled={loading}>
-                                    Enregistrer
-                                </button>
-
-                                <button type="button" onClick={() => setEditProfile(false)}>
-                                    Annuler
-                                </button>
-
-                                {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
-                            </form>
-                        )}
+                <div id="myPersonalsInformations">
+                    <Card width="full">
+                        {/* <PersonalsInformationsSection /> */}
+                        <Text size="lg" weight="bold">{i18n.myPersonalsInformations}</Text>
                     </Card>
                 </div>
             </div>
+            {openDialogLogout && (
+                <Dialog
+                    title={i18n.logout}
+                    buttonText={i18n.logout}
+                    onButtonClick={handleLogout}
+                    secondaryButtonText={i18n.cancel}
+                    onSecondaryButtonClick={() => setOpenDialogLogout(false)}
+                >
+                    {i18n.confirmLogout}
+                </Dialog>
+            )}
         </div>
     )
 }

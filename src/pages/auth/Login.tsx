@@ -30,7 +30,7 @@ const Login = () => {
             if (data.session) navigate('/account')
         }
         checkSession()
-    }, [])
+    })
 
     const handleOAuthLogin = async (provider: 'google' | 'github' | 'discord') => {
         setLoading(true)
@@ -109,7 +109,6 @@ const Login = () => {
                                 setEmailError('')
                             }}
                             error={emailError}
-                            required
                         />
 
                         <TextField
@@ -122,7 +121,6 @@ const Login = () => {
                                 setPasswordError('')
                             }}
                             error={passwordError}
-                            required
                         />
                     </div>
 

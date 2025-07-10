@@ -1,6 +1,6 @@
+/* eslint-disable no-console */
 import { supabase } from '@/lib/supabaseClient'
-import type { Profile } from '@/types/profile'
-
+import type { Profile } from '@/types/types'
 
 /**
  * Récupère les informations de base de l'utilisateur connecté
@@ -17,8 +17,8 @@ const getUserBasicInfo = async () => {
 const getUserProfile = async (userId: string): Promise<Profile | null> => {
     const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, avatar_url, updated_at')
-        .eq('id', userId)
+        .select('user_id, nickname, avatar_url, updated_at, riot_id, banner_url, rank, platform')
+        .eq('user_id', userId)
         .single()
 
     if (error) {
@@ -29,21 +29,40 @@ const getUserProfile = async (userId: string): Promise<Profile | null> => {
     return data
 }
 
+// create policy "Users can insert their own profile"
+// on profiles
+// for insert
+// with check (id = auth.uid());
+
+
+// create policy "Users can update their own profile"
+// on profiles
+// for update
+// using (id = auth.uid());
+
 /**
  * Crée ou met à jour le profil utilisateur
  */
 const editUserProfile = async (profile: {
-    id: string
-    full_name?: string
+    user_id: string
+    nickname?: string
+    riot_id?: string
     avatar_url?: string
+    banner_url?: string
+    rank?: string
+    platform?: string
 }): Promise<boolean> => {
     const { error } = await supabase
         .from('profiles')
         .upsert({
-            id: profile.id,
-            full_name: profile.full_name ?? null,
+            user_id: profile.user_id,
+            nickname: profile.nickname ?? null,
+            riot_id: profile.riot_id ?? null,
             avatar_url: profile.avatar_url ?? null,
+            banner_url: profile.banner_url ?? null,
             updated_at: new Date().toISOString(),
+            rank: profile.rank ?? null,
+            platform: profile.platform ?? null,
         })
 
     if (error) {

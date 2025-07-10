@@ -98,7 +98,6 @@ const ResetPasswordConfirm = () => {
                                 setErrorMessage('')
                             }}
                             error={passwordError}
-                            required
                         />
 
                         <TextField
@@ -113,7 +112,6 @@ const ResetPasswordConfirm = () => {
                                 setErrorMessage('')
                             }}
                             error={passwordConfirmError}
-                            required
                         />
 
                         {errorMessage && <Text size="sm" color={redError}>{errorMessage}</Text>}
@@ -130,13 +128,14 @@ const ResetPasswordConfirm = () => {
             {openDialog &&
                 <Dialog
                     title={i18n.passwordSuccesfullyUpdated}
-                    content={i18n.passwordSuccesfullyUpdatedcontent}
                     onButtonClick={() => {
                         navigate('/login')
                         setOpenDialog(false)
                     }}
                     buttonText={i18n.login}
-                />
+                >
+                    {i18n.passwordSuccesfullyUpdatedcontent}
+                </Dialog>
             }
         </div>
     )

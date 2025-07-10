@@ -19,10 +19,20 @@ type CrosshairProps = {
 
 const Crosshair = ({ data }: CrosshairProps) => {
     const [toastVisible, setToastVisible] = useState(false)
+    const [toastMessage, setToastMessage] = useState('')
 
     const onCopy = (code: string) => {
         copyText(code)
-        setToastVisible(true)
+            .then(() => {
+                setToastVisible(true)
+                setToastMessage(template(i18n.validationCopy)({
+                    name: data.name
+                }))
+            })
+            .catch((e) => {
+                setToastVisible(true)
+                setToastMessage(template(i18n.copyError)({ error: e }))
+            })
     }
 
     return (
@@ -56,23 +66,11 @@ const Crosshair = ({ data }: CrosshairProps) => {
                     {i18n.copyCode}
                 </Button>
                 {toastVisible && (
-                    <Toast onClose={() => setToastVisible(false)}>
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                            }}
-                        >
-                            <Info size={18} />
-                            <p>
-                                {template(i18n.validationCopy)({
-                                    name: data.name
-                                })}
-                            </p>
-                        </div>
-                    </Toast>
+                    <Toast
+                        message={toastMessage}
+                        icon={<Info size={18} />}
+                        onClose={() => setToastVisible(false)}
+                    />
                 )}
             </div>
         </Card>

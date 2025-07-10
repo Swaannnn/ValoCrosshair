@@ -6,9 +6,10 @@ type TextProps = {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     weight?: 'normal' | 'medium' | 'bold';
     color?: string;
+    style?: React.CSSProperties;
 }
 
-const Text = ({ children, size = 'md', weight = 'normal', color = mainBlack }: TextProps) => {
+const Text = ({ children, size = 'md', weight = 'normal', color = mainBlack, style }: TextProps) => {
     const fontSize = {
         xs: '0.75rem',
         sm: '0.875rem',
@@ -26,6 +27,7 @@ const Text = ({ children, size = 'md', weight = 'normal', color = mainBlack }: T
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
+                ...style,
             }}
         >
             {children}

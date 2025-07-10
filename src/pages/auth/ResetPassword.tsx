@@ -69,7 +69,6 @@ const ResetPassword = () => {
                             setMessage('')
                         }}
                         error={emailError}
-                        required
                     />
 
                     {message && (

@@ -3,7 +3,7 @@ import { darkRed1, lightRed, mainBlack, mainGrey, mainRed, mainWhite } from '@/c
 import { mediumRadius } from '@/constants/sizes.ts'
 import Text from '@components/Text.tsx'
 
-type Variant = 'primary' | 'secondary' | 'outlined'
+type Variant = 'primary' | 'secondary' | 'outlined' | 'text' | 'textDelete'
 
 type ButtonProps = {
 	variant?: Variant,
@@ -38,6 +38,17 @@ const getButtonStyle = (
             backgroundColor: isActive ? darkRed1 : isHovered ? lightRed : 'transparent',
             color: isHovered ? mainWhite : mainRed,
             border: `1px solid ${isActive ? darkRed1 : mainRed}`
+        }
+    case 'text':
+        return {
+            backgroundColor: isHovered ? mainGrey : mainWhite,
+            border: 'none'
+        }
+    case 'textDelete':
+        return {
+            backgroundColor: isHovered ? lightRed : mainWhite,
+            color: isHovered ? mainWhite : mainBlack,
+            border: 'none'
         }
     default:
         return {}
