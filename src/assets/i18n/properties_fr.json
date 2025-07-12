@@ -1,6 +1,8 @@
 {
   "about": "A propos",
   "account": "Compte",
+  "addAvatarToolip": "Ajouter une photo de profil\nImage (ex. PNG, JPG…)\nFormat carré recommandé – 256×256 px",
+  "addBannerToolip": "Ajouter une bannière\nImage (ex. PNG, JPG…)",
   "addClip": "Ajouter un clip",
   "addClipInstructions": "Veuillez renseigner un nom ainsi qu’un lien valide (YouTube ou Medal) pour votre clip.",
   "addNewClip": "Ajouter un nouveau clip",

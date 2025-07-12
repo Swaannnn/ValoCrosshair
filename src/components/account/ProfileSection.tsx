@@ -17,6 +17,7 @@ import Selector from '@components/Selector.tsx'
 import IconButton from '@components/IconButton.tsx'
 import { Pencil } from 'lucide-react'
 import { uploadToSupabase } from '@utils/uploadToSupabase.ts'
+import Tooltip from '@components/Tooltip.tsx'
 
 type ProfileSectionProps = {
     userId: string | null
@@ -32,12 +33,17 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
     const [riotIdError, setRiotIdError] = useState('')
     const [avatarUrl, setAvatarUrl] = useState('')
     // const [avatarUrlError, setAvatarUrlError] = useState('')
-    // const [bannerUrl, setBannerUrl] = useState('')
+    const [bannerUrl, setBannerUrl] = useState('')
     // const [bannerUrlError, setBannerUrlError] = useState('')
+    const [newBannerFile, setNewBannerFile] = useState<File | null>(null)
+    const [previewBannerUrl, setPreviewBannerUrl] = useState<string | null>(null)
     const [rank, setRank] = useState('')
     const [platform, setPlatform] = useState('')
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null)
+    const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
+
 
     const ranks = [
         { id: 'unranked', label: i18n.unranked },
@@ -68,40 +74,77 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
 
     useEffect(() => {
         if (profile?.avatar_url) setAvatarUrl(profile.avatar_url)
+        if (profile?.banner_url) setBannerUrl(profile.banner_url)
         if (profile?.nickname) setNickname(profile.nickname)
         if (profile?.riot_id) setRiotId(profile.riot_id)
         if (profile?.rank) setRank(profile.rank)
         if (profile?.platform) setPlatform(profile.platform)
     }, [profile])
 
-    const handleUpdateAvatar = async (file: File) => {
-        if (userId) {
-            const filee = await uploadToSupabase(file, userId, 'avatar')
-            if (filee) setAvatarUrl(filee)
-        }
-    }
+    // const handleUpdateAvatar = async (file: File) => {
+    //     if (userId) {
+    //         const avatar = await uploadToSupabase(file, userId, 'avatar')
+    //         if (avatar) setAvatarUrl(avatar)
+    //     }
+    // }
 
     const handleEditProfile = async (e: FormEvent) => {
         e.preventDefault()
-        if (!profile) return
+        if (!profile || !userId) return
 
         setLoading(true)
-        const success = await editUserProfile({ user_id: profile.user_id, nickname: nickname, riot_id: riotId, avatar_url: avatarUrl, rank, platform })
+
+        let finalAvatarUrl = avatarUrl
+        if (newAvatarFile) {
+            const uploaded = await uploadToSupabase(newAvatarFile, userId, 'avatar')
+            if (uploaded) {
+                finalAvatarUrl = uploaded
+                setAvatarUrl(uploaded)
+            }
+        }
+
+        let finalBannerUrl = bannerUrl
+        if (newBannerFile) {
+            const uploaded = await uploadToSupabase(newBannerFile, userId, 'banner')
+            if (uploaded) {
+                finalBannerUrl = uploaded
+                setBannerUrl(uploaded)
+            }
+        }
+
+        const success = await editUserProfile({
+            user_id: profile.user_id,
+            nickname: nickname,
+            riot_id: riotId,
+            avatar_url: avatarUrl,
+            banner_url: bannerUrl,
+            rank,
+            platform
+        })
+
         if (!success) {
             setErrorMessage('Erreur lors de la sauvegarde du profil')
+            setLoading(false)
             return
         }
+
         setProfile(prev => prev ? {
             ...prev,
             nickname,
             riot_id: riotId,
-            avatar_url: avatarUrl,
+            avatar_url: finalAvatarUrl,
+            banner_url: finalBannerUrl,
             rank,
             platform
         } : null)
+
+        setNewAvatarFile(null)
+        setPreviewAvatarUrl(null)
+        setNewBannerFile(null)
+        setPreviewBannerUrl(null)
         setErrorMessage('')
-        setLoading(false)
         setEditProfile(false)
+        setLoading(false)
     }
 
     return (
@@ -115,7 +158,7 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                         <div style={{ position: 'relative' }}>
                             <div style={{ width: '100%', height: bannerHeight, overflow: 'hidden' }}>
                                 <img
-                                    src={profile.banner_url || DefaultBanner} // mettre banière par défaut
+                                    src={previewBannerUrl || bannerUrl || DefaultBanner}
                                     alt="user banner"
                                     style={{
                                         width: '100%',
@@ -125,14 +168,27 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                 />
                             </div>
                             {editProfile &&
-                                <p style={{ position: 'absolute', bottom: 'calc(58px + 0.5rem)', right: '0.5rem' }}>
-                                    <IconButton
-                                        size={'40px'}
-                                        onClick={() => {}}
-                                    >
-                                        <Pencil/>
-                                    </IconButton>
-                                </p>
+                                <div style={{ position: 'absolute', bottom: 'calc(58px + 0.5rem)', right: '0.5rem', zIndex: 100 }}>
+                                    <label style={{ display: 'inline-block', cursor: 'pointer' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0]
+                                                if (file) {
+                                                    setNewBannerFile(file)
+                                                    setPreviewBannerUrl(URL.createObjectURL(file))
+                                                }
+                                            }}
+                                        />
+                                        <Tooltip position='bottom-left' content={i18n.addBannerToolip}>
+                                            <IconButton size="40px">
+                                                <Pencil />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </label>
+                                </div>
                             }
                             <div
                                 style={{
@@ -144,11 +200,11 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                     borderRadius: '50%',
                                     border: `4px solid ${mainWhite}`,
                                     // overflow: 'hidden',
-                                    backgroundColor: '#fff',
+                                    backgroundColor: '#fff'
                                 }}
                             >
                                 <img
-                                    src={avatarUrl || profile.avatar_url || ''} // mettre avatar par défaut
+                                    src={previewAvatarUrl || avatarUrl || ''} // mettre avatar par défaut
                                     alt="user avatar"
                                     style={{
                                         width: '100%',
@@ -162,16 +218,21 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                         <label style={{ display: 'inline-block', cursor: 'pointer' }}>
                                             <input
                                                 type="file"
-                                                accept="image/png"
+                                                accept="image/*"
                                                 style={{ display: 'none' }}
                                                 onChange={(e) => {
                                                     const file = e.target.files?.[0]
-                                                    if (file) handleUpdateAvatar(file)
+                                                    if (file) {
+                                                        setNewAvatarFile(file)
+                                                        setPreviewAvatarUrl(URL.createObjectURL(file))
+                                                    }
                                                 }}
                                             />
-                                            <IconButton size="40px">
-                                                <Pencil />
-                                            </IconButton>
+                                            <Tooltip position='bottom' content={i18n.addAvatarToolip}>
+                                                <IconButton size="40px">
+                                                    <Pencil />
+                                                </IconButton>
+                                            </Tooltip>
                                         </label>
                                     </div>
                                 )}

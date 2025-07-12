@@ -1,4 +1,4 @@
-// /* eslint-disable no-console */
+/* eslint-disable no-console */
 import { supabase } from '@/lib/supabaseClient'
 
 export async function uploadToSupabase(
@@ -13,8 +13,32 @@ export async function uploadToSupabase(
         }
 
         const ext = file.name.split('.').pop()
-        const fileName = `${type}.${ext}`
+        const timestamp = Date.now()
+        const fileName = `${type}-${timestamp}.${ext}`
         const filePath = `user-${userId}/${fileName}`
+        const folderPrefix = `user-${userId}/`
+
+        const { data: list, error: listError } = await supabase.storage
+            .from('user-media')
+            .list(folderPrefix, { limit: 100 })
+
+        if (listError) {
+            console.error('Erreur lors de la lecture du dossier Supabase:', listError)
+        } else {
+            const filesToDelete = list
+                .filter((file) => file.name.startsWith(type))
+                .map((file) => `${folderPrefix}${file.name}`)
+
+            if (filesToDelete.length > 0) {
+                const { error: deleteError } = await supabase.storage
+                    .from('user-media')
+                    .remove(filesToDelete)
+
+                if (deleteError) {
+                    console.error('Erreur suppression ancienne(s) image(s):', deleteError)
+                }
+            }
+        }
 
         const { error: uploadError } = await supabase.storage
             .from('user-media')
