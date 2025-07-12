@@ -165,6 +165,8 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
             hasError = true
         }
 
+        console.log(clipNameError, clipLinkError)
+
         if (hasError) return
 
         setLoading(true)

@@ -114,7 +114,7 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
 
         const success = await editUserProfile({
             user_id: profile.user_id,
-            nickname: nickname,
+            nickname,
             riot_id: riotId,
             avatar_url: avatarUrl,
             banner_url: bannerUrl,
