@@ -1,18 +1,20 @@
 import { useState, type ReactNode } from 'react'
 import { roundedRadius } from '@constants/sizes.ts'
-import { mainGrey, mainWhite } from '@constants/colors.ts'
+import { lightGrey, mainGrey, mainWhite } from '@constants/colors.ts'
 
 type IconButtonProps = {
 	size?: string,
+    variant?: 'primary' | 'light',
 	children?: ReactNode,
 	onClick?: () => void,
 }
 
-const IconButton = ({ children, size, onClick }: IconButtonProps) => {
+const IconButton = ({ children, variant = 'primary', size, onClick }: IconButtonProps) => {
     const [isHovered, setIsHovered] = useState(false)
 
+    const primary = variant === 'primary'
     let backgroundColor = mainWhite
-    if (isHovered) backgroundColor = mainGrey
+    if (isHovered) backgroundColor = primary ? mainGrey : lightGrey
 
     return (
         <div
@@ -25,7 +27,7 @@ const IconButton = ({ children, size, onClick }: IconButtonProps) => {
                 alignItems: 'center',
 
                 backgroundColor,
-                border: `1px solid ${mainGrey}`,
+                border: primary ? `1px solid ${mainGrey}` : undefined,
                 borderRadius: roundedRadius,
                 cursor: 'pointer',
 

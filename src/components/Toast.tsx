@@ -36,6 +36,7 @@ const Toast = ({ message, icon, onClose, duration = 5000 }: ToastProps) => {
                 transition: 'opacity 300ms ease, transform 300ms ease',
                 opacity: disappearing ? 0 : 1,
                 transform: disappearing ? 'translateY(30px)' : 'translateY(0)',
+                zIndex: 1000,
             }}
         >
             <div

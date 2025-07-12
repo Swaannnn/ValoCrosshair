@@ -1,4 +1,5 @@
 import React from 'react'
+import Text from '@components/Text.tsx'
 
 type YouTubeEmbedProps = {
 	url: string
@@ -16,7 +17,7 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ url, width = '100%', height
     const videoId = extractYouTubeID(url)
 
     if (!videoId) {
-        return <p>i18n.Vidéo Youtube introuvable (refaire un composant propre)</p>
+        return <Text>i18n.Vidéo Youtube introuvable (refaire un composant propre)</Text>
     }
 
     return (

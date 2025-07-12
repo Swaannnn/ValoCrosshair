@@ -1,9 +1,10 @@
 import i18n from '@/simple-react-i18n.ts'
+import Text from '@components/Text.tsx'
 
 const About = () => {
     return (
         <div style={{ padding: '1rem' }}>
-            <p>{i18n.about}</p>
+            <Text>{i18n.about}</Text>
         </div>
     )
 }

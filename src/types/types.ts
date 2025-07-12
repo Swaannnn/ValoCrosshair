@@ -27,6 +27,7 @@ export type Profile = {
 export type CrosshairCategory = 'pro' | 'fun' | 'user'
 
 export type Crosshair = {
+	id: string
 	code: string
 	name: string
 	category: CrosshairCategory

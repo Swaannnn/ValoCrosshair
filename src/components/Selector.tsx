@@ -29,9 +29,8 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
                     display: 'block',
                     fontWeight: 'bold',
                     marginBottom: '0.5rem',
-                    cursor: 'pointer'
+                    cursor: 'text'
                 }}
-                onClick={() => setIsOpen(!isOpen)}
             >
                 {label}
             </label>

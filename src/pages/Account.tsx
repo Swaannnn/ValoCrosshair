@@ -12,7 +12,8 @@ import ProfileSection from '@components/account/ProfileSection.tsx'
 import { supabase } from '@/lib/supabaseClient.ts'
 import Dialog from '@components/Dialog.tsx'
 import Card from '@components/Card.tsx'
-import ClipsSection from '@components/account/ClipsSection.tsx'
+import ClipsSection from '@components/clip/ClipsSection.tsx'
+import CrosshairsSection from '@components/crosshair/CrosshairsSection.tsx'
 
 const sectionIds = ['myProfile', 'myCrosshairs', 'myClips', 'myPersonalsInformations']
 
@@ -123,8 +124,7 @@ const Account = () => {
 
                 <div id="myCrosshairs">
                     <Card width="full">
-                        {/* <CrosshairsSection /> */}
-                        <Text size="lg" weight="bold">{i18n.myCrosshairs}</Text>
+                        <CrosshairsSection userId={userId} />
                     </Card>
                 </div>
 

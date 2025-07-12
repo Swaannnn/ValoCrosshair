@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { mainBlack } from '@constants/colors.ts'
 
 type TextProps = {
@@ -6,7 +6,7 @@ type TextProps = {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     weight?: 'normal' | 'medium' | 'bold';
     color?: string;
-    style?: React.CSSProperties;
+    style?: CSSProperties;
 }
 
 const Text = ({ children, size = 'md', weight = 'normal', color = mainBlack, style }: TextProps) => {

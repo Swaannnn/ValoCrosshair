@@ -1,4 +1,5 @@
 import React from 'react'
+import Text from '@components/Text.tsx'
 
 type MedalEmbedProps = {
     url: string
@@ -16,7 +17,7 @@ const MedalEmbed: React.FC<MedalEmbedProps> = ({ url, width = '100%', height = '
     const clipId = extractMedalID(url)
 
     if (!clipId) {
-        return <p>i18n.Vidéo Medal introuvable (refaire un composant propre)</p>
+        return <Text>i18n.Vidéo Medal introuvable (refaire un composant propre)</Text>
     }
 
     return (

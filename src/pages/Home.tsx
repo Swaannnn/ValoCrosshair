@@ -1,5 +1,5 @@
 import crosshairs from '@/data/crosshairs.json'
-import Crosshair from '@/components/Crosshair.tsx'
+import CrosshairItem from '@components/crosshair/CrosshairItem.tsx'
 import FilterButtons from '@/components/FilterButtons.tsx'
 import { useState } from 'react'
 import i18n from '@/simple-react-i18n.ts'
@@ -32,7 +32,7 @@ const Home = () => {
                     .filter((crosshair) => type === 'all' || crosshair.type === type)
                     .map((crosshair, index) => (
                         <div key={index}>
-                            <Crosshair data={crosshair}/>
+                            <CrosshairItem id={crosshair.id} data={crosshair}/>
                         </div>
                     ))
                 }
