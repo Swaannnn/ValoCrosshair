@@ -1,23 +1,24 @@
 import i18n from '@/simple-react-i18n.ts'
-import Card from '@components/Card.tsx'
+import Card from '@components/ui/Card.tsx'
 import type { Profile } from '@/types/types'
-import ProgressBar from '@components/ProgressBar.tsx'
+import ProgressBar from '@components/ui/ProgressBar.tsx'
 import DefaultBanner from '@/assets/images/default_banner.png'
 import { mainWhite, redError } from '@constants/colors.ts'
 import { avatarSize, bannerHeight } from '@constants/sizes.ts'
-import Text from '@components/Text.tsx'
+import Text from '@components/ui/Text.tsx'
 import type { UserBasicInfo } from '@/types/types'
 import { formatDateToLong } from '@utils/date.ts'
-import Button from '@components/Button.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
 import { type FormEvent, useEffect, useState } from 'react'
-import TextField from '@components/TextField.tsx'
-import { editUserProfile, getUserProfile } from '@utils/user.ts'
+import TextField from '@components/ui/inputs/TextField.tsx'
+import { editUserProfile, getUserProfile } from '@utils/db/user.ts'
 import { compact } from 'lodash'
-import Selector from '@components/Selector.tsx'
-import IconButton from '@components/IconButton.tsx'
+import Selector from '@components/ui/inputs/Selector.tsx'
+import IconButton from '@components/ui/buttons/IconButton.tsx'
 import { Pencil } from 'lucide-react'
-import { uploadToSupabase } from '@utils/uploadToSupabase.ts'
-import Tooltip from '@components/Tooltip.tsx'
+import { uploadToSupabase } from '@utils/db/uploadToSupabase.ts'
+import Tooltip from '@components/ui/Tooltip.tsx'
+import FileUploader from '@components/ui/inputs/FileUploader.tsx'
 
 type ProfileSectionProps = {
     userId: string | null
@@ -32,18 +33,15 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
     const [riotId, setRiotId] = useState('')
     const [riotIdError, setRiotIdError] = useState('')
     const [avatarUrl, setAvatarUrl] = useState('')
-    // const [avatarUrlError, setAvatarUrlError] = useState('')
+    const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null)
+    const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
     const [bannerUrl, setBannerUrl] = useState('')
-    // const [bannerUrlError, setBannerUrlError] = useState('')
     const [newBannerFile, setNewBannerFile] = useState<File | null>(null)
     const [previewBannerUrl, setPreviewBannerUrl] = useState<string | null>(null)
     const [rank, setRank] = useState('')
     const [platform, setPlatform] = useState('')
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null)
-    const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
-
 
     const ranks = [
         { id: 'unranked', label: i18n.unranked },
@@ -81,12 +79,15 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
         if (profile?.platform) setPlatform(profile.platform)
     }, [profile])
 
-    // const handleUpdateAvatar = async (file: File) => {
-    //     if (userId) {
-    //         const avatar = await uploadToSupabase(file, userId, 'avatar')
-    //         if (avatar) setAvatarUrl(avatar)
-    //     }
-    // }
+    const handleUpdateAvatar = async (file: File) => {
+        setNewAvatarFile(file)
+        setPreviewAvatarUrl(URL.createObjectURL(file))
+    }
+
+    const handleUpdateBanner = async (file: File) => {
+        setNewBannerFile(file)
+        setPreviewBannerUrl(URL.createObjectURL(file))
+    }
 
     const handleEditProfile = async (e: FormEvent) => {
         e.preventDefault()
@@ -116,8 +117,8 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
             user_id: profile.user_id,
             nickname,
             riot_id: riotId,
-            avatar_url: avatarUrl,
-            banner_url: bannerUrl,
+            avatar_url: finalAvatarUrl,
+            banner_url: finalBannerUrl,
             rank,
             platform
         })
@@ -169,25 +170,13 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                             </div>
                             {editProfile &&
                                 <div style={{ position: 'absolute', bottom: 'calc(58px + 0.5rem)', right: '0.5rem', zIndex: 100 }}>
-                                    <label style={{ display: 'inline-block', cursor: 'pointer' }}>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            style={{ display: 'none' }}
-                                            onChange={(e) => {
-                                                const file = e.target.files?.[0]
-                                                if (file) {
-                                                    setNewBannerFile(file)
-                                                    setPreviewBannerUrl(URL.createObjectURL(file))
-                                                }
-                                            }}
-                                        />
+                                    <FileUploader action={handleUpdateBanner}>
                                         <Tooltip position='bottom-left' content={i18n.addBannerToolip}>
                                             <IconButton size="40px">
                                                 <Pencil />
                                             </IconButton>
                                         </Tooltip>
-                                    </label>
+                                    </FileUploader>
                                 </div>
                             }
                             <div
@@ -199,7 +188,6 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                     height: avatarSize,
                                     borderRadius: '50%',
                                     border: `4px solid ${mainWhite}`,
-                                    // overflow: 'hidden',
                                     backgroundColor: '#fff'
                                 }}
                             >
@@ -216,23 +204,13 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                 {editProfile && (
                                     <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', zIndex: 100 }}>
                                         <label style={{ display: 'inline-block', cursor: 'pointer' }}>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                style={{ display: 'none' }}
-                                                onChange={(e) => {
-                                                    const file = e.target.files?.[0]
-                                                    if (file) {
-                                                        setNewAvatarFile(file)
-                                                        setPreviewAvatarUrl(URL.createObjectURL(file))
-                                                    }
-                                                }}
-                                            />
-                                            <Tooltip position='bottom' content={i18n.addAvatarToolip}>
-                                                <IconButton size="40px">
-                                                    <Pencil />
-                                                </IconButton>
-                                            </Tooltip>
+                                            <FileUploader action={handleUpdateAvatar}>
+                                                <Tooltip position='bottom' content={i18n.addAvatarToolip}>
+                                                    <IconButton size="40px">
+                                                        <Pencil />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </FileUploader>
                                         </label>
                                     </div>
                                 )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { smallRadius } from '@constants/sizes.ts'
 import { lightGrey, mainGrey, mainRed, mainWhite } from '@constants/colors.ts'
+import Text from '@components/ui/Text.tsx'
 
 type Options = {
     id: string
@@ -109,9 +110,9 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
             )}
 
             {error && (
-                <p style={{ color: '#e63946', fontSize: '0.85rem', marginTop: 4 }}>
+                <Text color={mainRed} size='sm' style={{ marginTop: '0.5rem' }}>
                     {error}
-                </p>
+                </Text>
             )}
         </div>
     )

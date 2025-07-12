@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabaseClient.ts'
-import Button from '@components/Button.tsx'
-import TextField from '@components/TextField.tsx'
-import Text from '@components/Text.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
+import TextField from '@components/ui/inputs/TextField.tsx'
+import Text from '@components/ui/Text.tsx'
 import { greenValidation, lightGrey } from '@constants/colors.ts'
 import { validateEmail } from '@utils/email.ts'
 import i18n from '@/simple-react-i18n.ts'
 import { headerHeight } from '@constants/sizes.ts'
-import Card from '@components/Card.tsx'
+import Card from '@components/ui/Card.tsx'
 
 const ResetPassword = () => {
     const [email, setEmail] = useState('')

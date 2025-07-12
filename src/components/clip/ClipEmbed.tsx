@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { mainBlack80, mainWhite } from '@constants/colors.ts'
-import Text from '@components/Text.tsx'
+import Text from '@components/ui/Text.tsx'
 import { OctagonX } from 'lucide-react'
 import i18n from '@/simple-react-i18n.ts'
 
@@ -31,7 +31,6 @@ const ClipEmbed = ({ link, width = '100%', height = '100%' }: ClipEmbedProps) =>
 
         if (link.includes('medal')) {
             const id = extractMedalID(link)
-	        console.log(id)
             return id ? `https://medal.tv/clip/${id}/embed` : null
         }
 

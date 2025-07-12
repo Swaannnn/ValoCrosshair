@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { lightRed, mainWhite } from '@/constants/colors.ts'
 import i18n from '@/simple-react-i18n.ts'
-import { useSession } from '@/features/auth/useSession.ts'
+import { useSession } from '@hooks/auth/useSession.ts'
 import { headerHeight } from '@constants/sizes.ts'
 
 const buttonHeaderStyle = {

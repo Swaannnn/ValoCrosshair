@@ -1,15 +1,19 @@
-import Text from '@components/Text.tsx'
-import i18n from '@/simple-react-i18n.ts'
-import { CirclePlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import TextField from '@components/TextField.tsx'
+import { CirclePlus } from 'lucide-react'
+import i18n from '@/simple-react-i18n.ts'
 import type { Crosshair } from '@/types/types.ts'
-import ProgressBar from '@components/ProgressBar.tsx'
-import Dialog from '@components/Dialog.tsx'
+import Text from '@components/ui/Text.tsx'
+import TextField from '@components/ui/inputs/TextField.tsx'
+import ProgressBar from '@components/ui/ProgressBar.tsx'
+import Dialog from '@components/ui/Dialog.tsx'
 import CrosshairItem from '@components/crosshair/CrosshairItem.tsx'
+import FileUploader from '@components/ui/inputs/FileUploader.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
 import { mediumRadius } from '@constants/sizes.ts'
+import { mainBlack80, mainGrey, mainRed } from '@constants/colors.ts'
+import DefaultCrosshair from '@/assets/images/default_crosshair.png'
 import { addCrosshair, getUserCrosshairs } from '@utils/db/crosshairs.ts'
-import { mainBlack80, mainGrey } from '@constants/colors.ts'
+import { uploadCrosshair } from '@utils/db/uploadToSupabase.ts'
 
 type CrosshairsSectionProps = {
     userId: string | null
@@ -18,12 +22,17 @@ type CrosshairsSectionProps = {
 const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
     const [crosshairs, setCrosshairs] = useState<Crosshair[]>([])
     const [loading, setLoading] = useState(false)
+
     const [crosshairName, setCrosshairName] = useState('')
-    const [crosshairNameError, setCrosshairNameError] = useState('')
-    const [crosshairImage, setCrosshairImage] = useState('')
-    const [crosshairImageError, setCrosshairImageError] = useState('')
     const [crosshairCode, setCrosshairCode] = useState('')
+    const [crosshairImage, setCrosshairImage] = useState('')
+    const [previewCrosshairUrl, setPreviewCrosshairUrl] = useState('')
+    const [newCrosshairFile, setNewCrosshairFile] = useState<File | null>(null)
+
+    const [crosshairNameError, setCrosshairNameError] = useState('')
     const [crosshairCodeError, setCrosshairCodeError] = useState('')
+    const [crosshairImageError, setCrosshairImageError] = useState('')
+
     const [openNewCrosshair, setOpenNewCrosshair] = useState(false)
     const [isAddCrosshairHovered, setIsAddCrosshairHovered] = useState(false)
 
@@ -36,127 +45,166 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
         })
     }, [userId])
 
-    const handleAddCrosshair = async () => {
-        let hasError = false
+    const resetStates = () => {
+        setCrosshairName('')
+        setCrosshairCode('')
+        setCrosshairImage('')
+        setPreviewCrosshairUrl('')
+        setNewCrosshairFile(null)
+
         setCrosshairNameError('')
-        setCrosshairImageError('')
         setCrosshairCodeError('')
+        setCrosshairImageError('')
+
+        setOpenNewCrosshair(false)
+        setLoading(false)
+    }
+
+    const validateForm = () => {
+        let valid = true
 
         if (!crosshairName.trim()) {
             setCrosshairNameError(i18n.crosshairNameRequired)
-            hasError = true
+            valid = false
         }
-        if (!crosshairImage.trim()) {
+
+        if (!newCrosshairFile) {
             setCrosshairImageError(i18n.crosshairImageRequired)
-            hasError = true
+            valid = false
         }
+
         if (!crosshairCode.trim()) {
             setCrosshairCodeError(i18n.crosshairCodeRequired)
-            hasError = true
+            valid = false
         }
 
-        if (hasError) return
+        return valid
+    }
+
+    const handleAddCrosshair = async () => {
+        if (!userId || !validateForm()) return
 
         setLoading(true)
-        const { id, error } = await addCrosshair(crosshairCode.trim(), crosshairName.trim(), crosshairImage, 'user')
 
-        if (error) {
+        let finalImageUrl = crosshairImage
+
+        if (newCrosshairFile) {
+            const previewUrl = URL.createObjectURL(newCrosshairFile)
+            setCrosshairImage(previewUrl)
+
+            const uploadedUrl = await uploadCrosshair(newCrosshairFile, userId)
+            if (!uploadedUrl) {
+                alert(i18n.unableAddNewCrosshair)
+                setLoading(false)
+                return
+            }
+
+            finalImageUrl = uploadedUrl
+            setCrosshairImage(uploadedUrl)
+        }
+
+        const { id, error } = await addCrosshair(
+            crosshairCode.trim(),
+            crosshairName.trim(),
+            finalImageUrl,
+            'user'
+        )
+
+        if (error || !id) {
             alert(i18n.unableAddNewCrosshair)
             setLoading(false)
             return
         }
 
-        if (userId) {
-            setCrosshairs(prev => [
-                ...prev,
-                {
-                    name: crosshairName.trim(),
-                    image_url: crosshairImage,
-                    code: crosshairCode.trim(),
-                    category: 'user',
-                    id: id,
-                    user_id: userId,
-                    created_at: new Date().toISOString(),
-                }
-            ])
-        }
+        setCrosshairs(prev => [
+            ...prev,
+            {
+                id,
+                user_id: userId,
+                name: crosshairName.trim(),
+                image_url: finalImageUrl,
+                code: crosshairCode.trim(),
+                category: 'user',
+                created_at: new Date().toISOString(),
+            }
+        ])
 
-        setLoading(false)
-        setOpenNewCrosshair(false)
-        setCrosshairName('')
-        setCrosshairImage('')
-        setCrosshairCode('')
+        resetStates()
     }
 
+    const handleAddCrosshairImage = (file: File) => {
+        setNewCrosshairFile(file)
+        setPreviewCrosshairUrl(URL.createObjectURL(file))
+        setCrosshairImageError('')
+    }
 
     const handleDeleteCrosshairFromList = (id: string) => {
-        setCrosshairs((prev) => prev.filter(crosshair => crosshair.id !== id))
+        setCrosshairs(prev => prev.filter(crosshair => crosshair.id !== id))
     }
 
     return (
         <div>
             <Text size="lg" weight="bold">{i18n.myCrosshairs}</Text>
-            <Text color={mainBlack80}>{(i18n.myCrosshairsText)}</Text>
+            <Text color={mainBlack80}>{i18n.myCrosshairsText}</Text>
+
             <div style={{ paddingTop: '1rem' }}>
                 {loading ? (
                     <ProgressBar title={i18n.loadingCrosshairs} />
                 ) : (
-                    <>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                            {crosshairs.map((crosshair) => (
-                                <div key={crosshair.id}>
-                                    <CrosshairItem
-                                        id={crosshair.id}
-                                        data={{ code: crosshair.code, name: crosshair.name, image: crosshair.image_url, type: 'user' }}
-                                        onDelete={handleDeleteCrosshairFromList}
-                                    />
-                                </div>
-                            ))}
-                            {crosshairs.length < 10 && (
-                                <div
-                                    style={{
-                                        height: '258px',
-                                        width: '196px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '1rem',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        borderRadius: mediumRadius,
-                                        background: isAddCrosshairHovered ? mainGrey : 'inherit',
-                                        transition: 'background-color 0.3s ease-in-out',
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        {crosshairs.map((crosshair) => (
+                            <div>
+                                <CrosshairItem
+                                    key={crosshair.id}
+                                    id={crosshair.id}
+                                    data={{
+                                        code: crosshair.code,
+                                        name: crosshair.name,
+                                        image: crosshair.image_url,
+                                        type: 'user'
                                     }}
-                                    onMouseEnter={() => setIsAddCrosshairHovered(true)}
-                                    onMouseLeave={() => setIsAddCrosshairHovered(false)}
-                                    onClick={() => setOpenNewCrosshair(true)}
-                                >
-                                    <CirclePlus size={64} />
-                                    <Text>{i18n.addCrosshair}</Text>
-                                </div>
-                            )}
-                        </div>
-                    </>
+                                    onDelete={handleDeleteCrosshairFromList}
+                                />
+                            </div>
+                        ))}
+                        {crosshairs.length < 10 && (
+                            <div
+                                style={{
+                                    height: '258px',
+                                    width: '196px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '1rem',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    borderRadius: mediumRadius,
+                                    background: isAddCrosshairHovered ? mainGrey : 'inherit',
+                                    transition: 'background-color 0.3s ease-in-out',
+                                }}
+                                onMouseEnter={() => setIsAddCrosshairHovered(true)}
+                                onMouseLeave={() => setIsAddCrosshairHovered(false)}
+                                onClick={() => setOpenNewCrosshair(true)}
+                            >
+                                <CirclePlus size={64} />
+                                <Text>{i18n.addCrosshair}</Text>
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
+
             {openNewCrosshair && (
                 <Dialog
                     title={i18n.addNewCrosshair}
                     buttonText={i18n.addCrosshair}
                     onButtonClick={handleAddCrosshair}
                     secondaryButtonText={i18n.cancel}
-                    onSecondaryButtonClick={() => {
-                        setOpenNewCrosshair(false)
-                        setCrosshairName('')
-                        setCrosshairNameError('')
-                        setCrosshairCode('')
-                        setCrosshairCodeError('')
-                        setCrosshairImage('')
-                        setCrosshairImageError('')
-                    }}
+                    onSecondaryButtonClick={resetStates}
                     horizontalButtons
                 >
                     <Text>{i18n.addCrosshairInstructions}</Text>
+
                     <TextField
                         label={i18n.crosshairName}
                         placeholder={i18n.crosshairNamePlaceholder}
@@ -167,6 +215,7 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                         }}
                         error={crosshairNameError}
                     />
+
                     <TextField
                         label={i18n.crosshairCode}
                         placeholder={i18n.crosshairCodePlaceholder}
@@ -177,15 +226,30 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                         }}
                         error={crosshairCodeError}
                     />
-                    <TextField
-                        label={i18n.crosshairImage}
-                        value={crosshairImage}
-                        onChange={(e) => {
-                            setCrosshairImage(e.target.value)
-                            setCrosshairImageError('')
-                        }}
-                        error={crosshairImageError}
-                    />
+
+                    <div style={{ width: '100%' }}>
+                        <Text weight='bold'>{i18n.crosshairImage}</Text>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}>
+                            <img
+                                src={previewCrosshairUrl || DefaultCrosshair}
+                                alt='crosshair preview'
+                                style={{ border: `1px solid ${!crosshairImageError ? mainGrey : mainRed}` }}
+                                width={128}
+                                height={128}
+                            />
+                            <Text color={mainRed} size='sm'>{crosshairImageError}</Text>
+
+                            <FileUploader action={handleAddCrosshairImage}>
+                                <Button variant='secondary'>{i18n.importImage}</Button>
+                            </FileUploader>
+                        </div>
+                    </div>
                 </Dialog>
             )}
         </div>

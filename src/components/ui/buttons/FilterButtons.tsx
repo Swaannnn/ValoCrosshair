@@ -1,4 +1,4 @@
-import ToggleButton from '@/components/ToggleButton.tsx'
+import ToggleButton from '@components/ui/buttons/ToggleButton.tsx'
 
 type ValuesProps = {
     label: string,

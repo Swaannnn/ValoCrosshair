@@ -1,13 +1,13 @@
-import Text from '@components/Text.tsx'
+import Text from '@components/ui/Text.tsx'
 import i18n from '@/simple-react-i18n.ts'
 import { mainBlack80, mainGrey } from '@constants/colors.ts'
 import { CirclePlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import TextField from '@components/TextField.tsx'
+import TextField from '@components/ui/inputs/TextField.tsx'
 import { addClip, getUserClips } from '@utils/db/clips.ts'
 import type { Clip } from '@/types/types.ts'
-import ProgressBar from '@components/ProgressBar.tsx'
-import Dialog from '@components/Dialog.tsx'
+import ProgressBar from '@components/ui/ProgressBar.tsx'
+import Dialog from '@components/ui/Dialog.tsx'
 import { mediumRadius } from '@constants/sizes.ts'
 import ClipItem from '@components/clip/ClipItem.tsx'
 
@@ -50,8 +50,6 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
             setClipLinkError(i18n.clipLinkInvalid)
             hasError = true
         }
-
-        console.log(clipNameError, clipLinkError)
 
         if (hasError) return
 

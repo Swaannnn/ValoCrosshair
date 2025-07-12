@@ -1,6 +1,6 @@
 import crosshairs from '@/data/crosshairs.json'
 import CrosshairItem from '@components/crosshair/CrosshairItem.tsx'
-import FilterButtons from '@/components/FilterButtons.tsx'
+import FilterButtons from '@components/ui/buttons/FilterButtons.tsx'
 import { useState } from 'react'
 import i18n from '@/simple-react-i18n.ts'
 

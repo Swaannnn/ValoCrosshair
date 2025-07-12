@@ -1,16 +1,16 @@
 import { copyText } from '@/utils/textUtils.ts'
-import Button from '@/components/Button.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
 import { Copy, Ellipsis, Info } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import Toast from '@/components/Toast.tsx'
+import Toast from '@components/ui/Toast.tsx'
 import i18n from '@/simple-react-i18n.ts'
 import { template } from 'lodash'
-import Card from '@components/Card.tsx'
+import Card from '@components/ui/Card.tsx'
 import { mainGrey, mainWhite } from '@constants/colors.ts'
-import Dialog from '@components/Dialog.tsx'
-import Text from '@components/Text.tsx'
-import { deleteUserCrosshair } from '@utils/db/crosshairs.ts'
-import IconButton from '@components/IconButton.tsx'
+import Dialog from '@components/ui/Dialog.tsx'
+import Text from '@components/ui/Text.tsx'
+import { deleteCrosshairWithImage } from '@utils/db/crosshairs.ts'
+import IconButton from '@components/ui/buttons/IconButton.tsx'
 
 type CrosshairItemProps = {
     id: string,
@@ -43,7 +43,7 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
 
     const handleDeleteCrosshair = async () => {
         if (onDelete) {
-            const { error } = await deleteUserCrosshair(id)
+            const { error } = await deleteCrosshairWithImage(id, data.image)
             if (error) {
                 alert(error.message)
             } else {
@@ -117,7 +117,6 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
                     style={{
                         height: '160px',
                         width: '160px',
-                        // backgroundColor: mainBlack,
                         backgroundImage: `url(${data.image})`,
                         backgroundSize: 'cover'
                     }}

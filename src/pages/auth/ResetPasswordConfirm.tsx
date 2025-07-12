@@ -1,14 +1,14 @@
 import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabaseClient.ts'
-import Button from '@components/Button.tsx'
-import TextField from '@components/TextField.tsx'
-import Text from '@components/Text.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
+import TextField from '@components/ui/inputs/TextField.tsx'
+import Text from '@components/ui/Text.tsx'
 import { redError, lightGrey, greenValidation } from '@constants/colors.ts'
 import { useNavigate } from 'react-router-dom'
 import i18n from '@/simple-react-i18n.ts'
 import { headerHeight } from '@constants/sizes.ts'
-import Card from '@components/Card.tsx'
-import Dialog from '@components/Dialog.tsx'
+import Card from '@components/ui/Card.tsx'
+import Dialog from '@components/ui/Dialog.tsx'
 
 const ResetPasswordConfirm = () => {
     const navigate = useNavigate()

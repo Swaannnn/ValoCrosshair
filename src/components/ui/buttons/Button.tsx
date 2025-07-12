@@ -1,7 +1,7 @@
 import { type CSSProperties, type ReactNode, useState } from 'react'
-import { darkRed1, lightRed, mainBlack, mainGrey, mainRed, mainWhite } from '@/constants/colors.ts'
-import { mediumRadius } from '@/constants/sizes.ts'
-import Text from '@components/Text.tsx'
+import { darkRed1, lightRed, mainBlack, mainGrey, mainRed, mainWhite } from '@constants/colors.ts'
+import { mediumRadius } from '@constants/sizes.ts'
+import Text from '@components/ui/Text.tsx'
 
 type Variant = 'primary' | 'secondary' | 'outlined' | 'text' | 'textDelete'
 

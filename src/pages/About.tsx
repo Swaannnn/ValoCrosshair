@@ -1,5 +1,5 @@
 import i18n from '@/simple-react-i18n.ts'
-import Text from '@components/Text.tsx'
+import Text from '@components/ui/Text.tsx'
 
 const About = () => {
     return (

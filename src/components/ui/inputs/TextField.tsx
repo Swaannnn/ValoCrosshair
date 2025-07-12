@@ -1,6 +1,7 @@
 import { type ChangeEvent } from 'react'
 import { smallRadius } from '@constants/sizes.ts'
 import { mainGrey, mainRed, mainWhite } from '@constants/colors.ts'
+import Text from '@components/ui/Text.tsx'
 
 interface TextFieldProps {
     label: string
@@ -37,9 +38,9 @@ const TextField = ({ label, type = 'text', value, onChange, error, placeholder }
             />
 
             {error && (
-                <p style={{ color: mainRed, fontSize: '0.85rem', marginTop: 4 }}>
+                <Text color={mainRed} size='sm' style={{ marginTop: '0.5rem' }}>
                     {error}
-                </p>
+                </Text>
             )}
         </div>
     )

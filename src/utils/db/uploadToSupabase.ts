@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabaseClient.ts'
 
-export async function uploadToSupabase(
+export const uploadToSupabase = async(
     file: File,
     userId: string,
     type: 'avatar' | 'banner',
-): Promise<string | null> {
+): Promise<string | null> => {
     try {
         if (!file.type.startsWith('image/')) {
             console.error('Le fichier doit être une image.')
@@ -15,8 +15,8 @@ export async function uploadToSupabase(
         const ext = file.name.split('.').pop()
         const timestamp = Date.now()
         const fileName = `${type}-${timestamp}.${ext}`
-        const filePath = `user-${userId}/${fileName}`
         const folderPrefix = `user-${userId}/`
+        const filePath = `${folderPrefix}${fileName}`
 
         const { data: list, error: listError } = await supabase.storage
             .from('user-media')
@@ -59,6 +59,41 @@ export async function uploadToSupabase(
         return data.publicUrl
     } catch (err) {
         console.error('Erreur inattendue upload:', err)
+        return null
+    }
+}
+
+export const uploadCrosshair = async (
+    file: File,
+    userId: string,
+): Promise<string | null> => {
+    try {
+        const ext = file.name.split('.').pop()
+        const timestamp = Date.now()
+        const fileName = `crosshair-${timestamp}.${ext}`
+        const folderPrefix = `user-${userId}/`
+        const filePath = `${folderPrefix}${fileName}`
+
+
+        const { error: uploadError } = await supabase.storage
+            .from('user-media')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: true,
+            })
+
+        if (uploadError) {
+            console.error('Erreur upload Supabase:', uploadError)
+            return null
+        }
+
+        const { data } = supabase.storage
+            .from('user-media')
+            .getPublicUrl(filePath)
+
+        return data.publicUrl
+    } catch (err) {
+        console.error('Erreur lors de upload crosshair:', err)
         return null
     }
 }

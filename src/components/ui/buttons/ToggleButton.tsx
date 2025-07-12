@@ -1,6 +1,6 @@
 import { type CSSProperties, type ReactNode, useState } from 'react'
-import { darkRed1, lightRed, mainRed, mainWhite } from '@/constants/colors.ts'
-import { mediumRadius } from '@/constants/sizes.ts'
+import { darkRed1, lightRed, mainRed, mainWhite } from '@constants/colors.ts'
+import { mediumRadius } from '@constants/sizes.ts'
 
 type ToggleButtonProps = {
 	selected: boolean

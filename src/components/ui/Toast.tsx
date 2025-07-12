@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useState } from 'react'
-import { mainWhite, mainBlack, mainGrey } from '@/constants/colors'
-import { mediumRadius } from '@/constants/sizes.ts'
-import Text from '@components/Text.tsx'
+import { mainWhite, mainBlack, mainGrey } from '@constants/colors.ts'
+import { mediumRadius } from '@constants/sizes.ts'
+import Text from '@components/ui/Text.tsx'
 
 type ToastProps = {
 	message: string

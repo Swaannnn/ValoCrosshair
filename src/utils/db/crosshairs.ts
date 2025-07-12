@@ -27,14 +27,52 @@ export const getUserCrosshairs = async (userId: string): Promise<Crosshair[] | n
     return data
 }
 
-export const deleteUserCrosshair = async (crosshairId: string): Promise<{ error: Error | null }> => {
-    const { error } = await supabase
+export const getUserCrosshairCount = async (userId: string): Promise<number | null> => {
+    const { count, error } = await supabase
         .from('crosshairs')
-        .delete()
-        .eq('id', crosshairId)
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
 
     if (error) {
-        console.error('Erreur suppression crosshair :', error.message)
+        console.error('Erreur comptage crosshairs :', error.message)
+        return null
     }
-    return { error }
+    return count ?? 0
+}
+
+
+
+export const deleteCrosshairWithImage = async (crosshairId: string, imageUrl: string): Promise<{ error: Error | null }> => {
+    try {
+        const { error: dbError } = await supabase
+            .from('crosshairs')
+            .delete()
+            .eq('id', crosshairId)
+
+        if (dbError) {
+            console.error('Erreur suppression crosshair dans DB:', dbError)
+            return { error: dbError }
+        }
+
+        const parts = imageUrl.split('/user-media/')
+        const path = parts[1]
+
+        if (!path) {
+            console.warn('Chemin d’image introuvable dans l’URL:', imageUrl)
+            return { error: null }
+        }
+
+        const { error: storageError } = await supabase.storage
+            .from('user-media')
+            .remove([path])
+
+        if (storageError) {
+            console.error('Erreur suppression image dans Supabase Storage:', storageError)
+        }
+
+        return { error: null }
+    } catch (err) {
+        console.error('Erreur inattendue lors de la suppression du crosshair:', err)
+        return { error: err as Error }
+    }
 }

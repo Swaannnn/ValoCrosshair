@@ -1,4 +1,4 @@
-import Text from '@components/Text.tsx'
+import Text from '@components/ui/Text.tsx'
 import { darkGrey, mainGrey } from '@constants/colors.ts'
 
 type ProgressBarProps = {

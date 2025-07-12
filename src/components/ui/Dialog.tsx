@@ -1,5 +1,5 @@
-import Text from '@components/Text.tsx'
-import Button from '@components/Button.tsx'
+import Text from '@components/ui/Text.tsx'
+import Button from '@components/ui/buttons/Button.tsx'
 import { mainWhite } from '@constants/colors.ts'
 import { mediumRadius } from '@constants/sizes.ts'
 import React, { useEffect, useRef } from 'react'

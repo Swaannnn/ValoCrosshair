@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { supabase } from '@/lib/supabaseClient'
-import type { Profile } from '@/types/types'
+import { supabase } from '@/lib/supabaseClient.ts'
+import type { Profile } from '@/types/types.ts'
 
 /**
  * Récupère les informations de base de l'utilisateur connecté
@@ -28,17 +28,6 @@ const getUserProfile = async (userId: string): Promise<Profile | null> => {
 
     return data
 }
-
-// create policy "Users can insert their own profile"
-// on profiles
-// for insert
-// with check (id = auth.uid());
-
-
-// create policy "Users can update their own profile"
-// on profiles
-// for update
-// using (id = auth.uid());
 
 /**
  * Crée ou met à jour le profil utilisateur
