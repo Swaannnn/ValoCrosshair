@@ -1,3 +1,4 @@
+/* eslint-disable-no-console */
 import { supabase } from '@/lib/supabaseClient'
 import type { Crosshair } from '@/types/types.ts'
 
