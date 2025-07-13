@@ -5,7 +5,8 @@ import { OctagonX } from 'lucide-react'
 import i18n from '@/simple-react-i18n.ts'
 
 const extractYouTubeID = (url: string): string | null => {
-    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|embed)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
+    const regex =
+        /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|embed)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
     const match = url.match(regex)
     return match ? match[1] : null
 }
@@ -17,12 +18,16 @@ const extractMedalID = (url: string): string | null => {
 }
 
 type ClipEmbedProps = {
-	link: string
-	width?: string
-	height?: string
+    link: string
+    width?: string
+    height?: string
 }
 
-const ClipEmbed = ({ link, width = '100%', height = '100%' }: ClipEmbedProps) => {
+const ClipEmbed = ({
+    link,
+    width = '100%',
+    height = '100%',
+}: ClipEmbedProps) => {
     const embedUrl = useMemo(() => {
         if (link.includes('youtube')) {
             const id = extractYouTubeID(link)
@@ -37,23 +42,26 @@ const ClipEmbed = ({ link, width = '100%', height = '100%' }: ClipEmbedProps) =>
         return null
     }, [link])
 
-    return (embedUrl) ? (
+    return embedUrl ? (
         <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
             <iframe
                 src={embedUrl}
                 allowFullScreen
                 style={{
                     position: 'absolute',
-                    top: 0, left: 0,
-                    width, height,
-                    border: 0
+                    top: 0,
+                    left: 0,
+                    width,
+                    height,
+                    border: 0,
                 }}
             />
         </div>
     ) : (
         <div
             style={{
-                height: '252px', width,
+                height: '252px',
+                width,
                 backgroundColor: mainBlack80,
 
                 display: 'flex',

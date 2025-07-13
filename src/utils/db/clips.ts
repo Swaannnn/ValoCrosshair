@@ -27,11 +27,10 @@ export const getUserClips = async (userId: string): Promise<Clip[] | null> => {
     return data
 }
 
-export const deleteUserClip = async (clipId: string): Promise<{ error: Error | null }> => {
-    const { error } = await supabase
-        .from('clips')
-        .delete()
-        .eq('id', clipId)
+export const deleteUserClip = async (
+    clipId: string,
+): Promise<{ error: Error | null }> => {
+    const { error } = await supabase.from('clips').delete().eq('id', clipId)
 
     if (error) {
         console.error('Erreur suppression clip :', error.message)

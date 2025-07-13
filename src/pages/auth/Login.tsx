@@ -32,7 +32,9 @@ const Login = () => {
         checkSession()
     })
 
-    const handleOAuthLogin = async (provider: 'google' | 'github' | 'discord') => {
+    const handleOAuthLogin = async (
+        provider: 'google' | 'github' | 'discord',
+    ) => {
         setLoading(true)
         setErrorMessage('')
         const { error } = await supabase.auth.signInWithOAuth({ provider })
@@ -70,7 +72,10 @@ const Login = () => {
             return
         }
 
-        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        })
 
         if (error) {
             setErrorMessage(i18n.invalidCredentials)
@@ -91,15 +96,22 @@ const Login = () => {
                 alignItems: 'center',
             }}
         >
-            <Card width='lg'>
-                <form onSubmit={handleEmailLogin} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>{i18n.login}</h2>
+            <Card width="lg">
+                <form
+                    onSubmit={handleEmailLogin}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
+                        {i18n.login}
+                    </h2>
 
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                    }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                        }}
+                    >
                         <TextField
                             label={i18n.email}
                             placeholder={i18n.emailPlaceholder}
@@ -124,9 +136,17 @@ const Login = () => {
                         />
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            marginTop: '0.5rem',
+                        }}
+                    >
                         <Text size="sm">
-                            <Link to="/resetPassword">{i18n.forgotPassword}</Link>
+                            <Link to="/resetPassword" animated>
+                                {i18n.forgotPassword}
+                            </Link>
                         </Text>
                     </div>
 
@@ -136,9 +156,11 @@ const Login = () => {
                         </Text>
                     )}
 
-                    <div style={{
-                        padding: '1.5rem 0'
-                    }}>
+                    <div
+                        style={{
+                            padding: '1.5rem 0',
+                        }}
+                    >
                         <Button variant="secondary" fullWidth loading={loading}>
                             {i18n.login}
                         </Button>
@@ -156,19 +178,46 @@ const Login = () => {
                     <Text>{i18n.or}</Text>
 
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <Button variant="secondary" onClick={() => handleOAuthLogin('discord')}>
-                            <img src={DiscordIcon} alt="Discord" width="24px" height="24px" />
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleOAuthLogin('discord')}
+                        >
+                            <img
+                                src={DiscordIcon}
+                                alt="Discord"
+                                width="24px"
+                                height="24px"
+                            />
                         </Button>
-                        <Button variant="secondary" onClick={() => handleOAuthLogin('github')}>
-                            <img src={GithubIcon} alt="Github" width="24px" height="24px" />
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleOAuthLogin('github')}
+                        >
+                            <img
+                                src={GithubIcon}
+                                alt="Github"
+                                width="24px"
+                                height="24px"
+                            />
                         </Button>
-                        <Button variant="secondary" onClick={() => handleOAuthLogin('google')}>
-                            <img src={GoogleIcon} alt="Google" width="24px" height="24px" />
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleOAuthLogin('google')}
+                        >
+                            <img
+                                src={GoogleIcon}
+                                alt="Google"
+                                width="24px"
+                                height="24px"
+                            />
                         </Button>
                     </div>
 
                     <Text size="sm">
-                        Pas de compte ? <Link to="/register">Inscrivez-vous ici</Link>
+                        Pas de compte ?{' '}
+                        <Link to="/register" animated>
+                            Inscrivez-vous ici
+                        </Link>
                     </Text>
                 </div>
             </Card>

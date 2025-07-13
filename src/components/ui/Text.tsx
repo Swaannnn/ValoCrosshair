@@ -2,14 +2,20 @@ import type { CSSProperties, ReactNode } from 'react'
 import { mainBlack } from '@constants/colors.ts'
 
 type TextProps = {
-    children: ReactNode;
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-    weight?: 'normal' | 'medium' | 'bold';
-    color?: string;
-    style?: CSSProperties;
+    children: ReactNode
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    weight?: 'normal' | 'medium' | 'bold'
+    color?: string
+    style?: CSSProperties
 }
 
-const Text = ({ children, size = 'md', weight = 'normal', color = mainBlack, style }: TextProps) => {
+const Text = ({
+    children,
+    size = 'md',
+    weight = 'normal',
+    color = mainBlack,
+    style,
+}: TextProps) => {
     const fontSize = {
         xs: '0.75rem',
         sm: '0.875rem',

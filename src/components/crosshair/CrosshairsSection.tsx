@@ -107,7 +107,7 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
             crosshairCode.trim(),
             crosshairName.trim(),
             finalImageUrl,
-            'user'
+            'user',
         )
 
         if (error || !id) {
@@ -116,7 +116,7 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
             return
         }
 
-        setCrosshairs(prev => [
+        setCrosshairs((prev) => [
             ...prev,
             {
                 id,
@@ -126,7 +126,7 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                 code: crosshairCode.trim(),
                 category: 'user',
                 created_at: new Date().toISOString(),
-            }
+            },
         ])
 
         resetStates()
@@ -139,19 +139,27 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
     }
 
     const handleDeleteCrosshairFromList = (id: string) => {
-        setCrosshairs(prev => prev.filter(crosshair => crosshair.id !== id))
+        setCrosshairs((prev) => prev.filter((crosshair) => crosshair.id !== id))
     }
 
     return (
         <div>
-            <Text size="lg" weight="bold">{i18n.myCrosshairs}</Text>
+            <Text size="lg" weight="bold">
+                {i18n.myCrosshairs}
+            </Text>
             <Text color={mainBlack80}>{i18n.myCrosshairsText}</Text>
 
             <div style={{ paddingTop: '1rem' }}>
                 {loading ? (
                     <ProgressBar title={i18n.loadingCrosshairs} />
                 ) : (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '0.5rem',
+                        }}
+                    >
                         {crosshairs.map((crosshair) => (
                             <div>
                                 <CrosshairItem
@@ -161,7 +169,7 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                                         code: crosshair.code,
                                         name: crosshair.name,
                                         image: crosshair.image_url,
-                                        type: 'user'
+                                        type: 'user',
                                     }}
                                     onDelete={handleDeleteCrosshairFromList}
                                 />
@@ -179,11 +187,18 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                                     justifyContent: 'center',
                                     cursor: 'pointer',
                                     borderRadius: mediumRadius,
-                                    background: isAddCrosshairHovered ? mainGrey : 'inherit',
-                                    transition: 'background-color 0.3s ease-in-out',
+                                    background: isAddCrosshairHovered
+                                        ? mainGrey
+                                        : 'inherit',
+                                    transition:
+                                        'background-color 0.3s ease-in-out',
                                 }}
-                                onMouseEnter={() => setIsAddCrosshairHovered(true)}
-                                onMouseLeave={() => setIsAddCrosshairHovered(false)}
+                                onMouseEnter={() =>
+                                    setIsAddCrosshairHovered(true)
+                                }
+                                onMouseLeave={() =>
+                                    setIsAddCrosshairHovered(false)
+                                }
                                 onClick={() => setOpenNewCrosshair(true)}
                             >
                                 <CirclePlus size={64} />
@@ -228,25 +243,33 @@ const CrosshairsSection = ({ userId }: CrosshairsSectionProps) => {
                     />
 
                     <div style={{ width: '100%' }}>
-                        <Text weight='bold'>{i18n.crosshairImage}</Text>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}>
+                        <Text weight="bold">{i18n.crosshairImage}</Text>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                            }}
+                        >
                             <img
                                 src={previewCrosshairUrl || DefaultCrosshair}
-                                alt='crosshair preview'
-                                style={{ border: `1px solid ${!crosshairImageError ? mainGrey : mainRed}` }}
+                                alt="crosshair preview"
+                                style={{
+                                    border: `1px solid ${!crosshairImageError ? mainGrey : mainRed}`,
+                                }}
                                 width={128}
                                 height={128}
                             />
-                            <Text color={mainRed} size='sm'>{crosshairImageError}</Text>
+                            <Text color={mainRed} size="sm">
+                                {crosshairImageError}
+                            </Text>
 
                             <FileUploader action={handleAddCrosshairImage}>
-                                <Button variant='secondary'>{i18n.importImage}</Button>
+                                <Button variant="secondary">
+                                    {i18n.importImage}
+                                </Button>
                             </FileUploader>
                         </div>
                     </div>

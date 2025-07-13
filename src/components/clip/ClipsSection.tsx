@@ -46,7 +46,10 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
         if (!clipLink.trim()) {
             setClipLinkError(i18n.clipLinkRequired)
             hasError = true
-        } else if (!clipLink.includes('youtube') && !clipLink.includes('medal')) {
+        } else if (
+            !clipLink.includes('youtube') &&
+            !clipLink.includes('medal')
+        ) {
             setClipLinkError(i18n.clipLinkInvalid)
             hasError = true
         }
@@ -63,7 +66,7 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
         }
 
         if (userId) {
-            setClips(prev => [
+            setClips((prev) => [
                 ...prev,
                 {
                     name: clipName.trim(),
@@ -71,7 +74,7 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
                     id: id,
                     user_id: userId,
                     created_at: new Date().toISOString(),
-                }
+                },
             ])
         }
 
@@ -81,21 +84,28 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
         setClipLink('')
     }
 
-
     const handleDeleteClipFromList = (id: string) => {
-        setClips((prev) => prev.filter(clip => clip.id !== id))
+        setClips((prev) => prev.filter((clip) => clip.id !== id))
     }
 
     return (
         <div>
-            <Text size="lg" weight="bold">{i18n.myClips}</Text>
+            <Text size="lg" weight="bold">
+                {i18n.myClips}
+            </Text>
             <Text color={mainBlack80}>{i18n.myClipsText}</Text>
             <div style={{ paddingTop: '1rem' }}>
                 {loading ? (
                     <ProgressBar title={i18n.loadingClips} />
                 ) : (
                     <>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: '0.5rem',
+                            }}
+                        >
                             {clips.map((clip) => (
                                 <ClipItem
                                     key={clip.id}
@@ -117,11 +127,18 @@ const ClipsSection = ({ userId }: ClipSectionProps) => {
                                         justifyContent: 'center',
                                         cursor: 'pointer',
                                         borderRadius: mediumRadius,
-                                        background: isAddClipHovered ? mainGrey : 'inherit',
-                                        transition: 'background-color 0.3s ease-in-out',
+                                        background: isAddClipHovered
+                                            ? mainGrey
+                                            : 'inherit',
+                                        transition:
+                                            'background-color 0.3s ease-in-out',
                                     }}
-                                    onMouseEnter={() => setIsAddClipHovered(true)}
-                                    onMouseLeave={() => setIsAddClipHovered(false)}
+                                    onMouseEnter={() =>
+                                        setIsAddClipHovered(true)
+                                    }
+                                    onMouseLeave={() =>
+                                        setIsAddClipHovered(false)
+                                    }
                                     onClick={() => setOpenNewClip(true)}
                                 >
                                     <CirclePlus size={64} />

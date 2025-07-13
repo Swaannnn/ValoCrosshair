@@ -18,7 +18,6 @@ const redError = '#E53935'
 const orangeWarning = '#FB8C00'
 const greenValidation = '#43A047'
 
-
 export {
     mainBlack,
     mainBlack80,

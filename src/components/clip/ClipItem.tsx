@@ -30,12 +30,16 @@ const ClipItem = ({ name, link, id, onDeleted }: ClipItemProps) => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (ellipsisRef.current && !ellipsisRef.current.contains(event.target as Node)) {
+            if (
+                ellipsisRef.current &&
+                !ellipsisRef.current.contains(event.target as Node)
+            ) {
                 setOpenMenu(false)
             }
         }
         if (openMenu) document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
+        return () =>
+            document.removeEventListener('mousedown', handleClickOutside)
     }, [openMenu])
 
     const handleDeleteClip = async () => {
@@ -53,7 +57,9 @@ const ClipItem = ({ name, link, id, onDeleted }: ClipItemProps) => {
         copyText(link)
             .then(() => {
                 setToastVisible(true)
-                setToastMessage(template(i18n.copyClipLinkSuccess)({ name: name }))
+                setToastMessage(
+                    template(i18n.copyClipLinkSuccess)({ name: name }),
+                )
             })
             .catch((e) => {
                 setToastVisible(true)
@@ -65,10 +71,23 @@ const ClipItem = ({ name, link, id, onDeleted }: ClipItemProps) => {
         <>
             <div style={{ height: '310px', width: 480, position: 'relative' }}>
                 <Card>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
-                        <Text size="md" weight='bold' style={{ marginBottom: '0.5rem' }}>{name}</Text>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            position: 'relative',
+                        }}
+                    >
+                        <Text
+                            size="md"
+                            weight="bold"
+                            style={{ marginBottom: '0.5rem' }}
+                        >
+                            {name}
+                        </Text>
                         <div ref={ellipsisRef} style={{ position: 'relative' }}>
-                            <IconButton variant='light'>
+                            <IconButton variant="light">
                                 <Ellipsis
                                     size="1rem"
                                     onClick={() => setOpenMenu(!openMenu)}
@@ -89,11 +108,19 @@ const ClipItem = ({ name, link, id, onDeleted }: ClipItemProps) => {
                                         zIndex: 100,
                                     }}
                                 >
-                                    <Button variant="text" onClick={() => onCopy(link)}>{i18n.copyLink}</Button>
-                                    <Button variant="textDelete" onClick={() => {
-                                        setOpenDialogDeleteClip(true)
-                                        setOpenMenu(false)
-                                    }}>
+                                    <Button
+                                        variant="text"
+                                        onClick={() => onCopy(link)}
+                                    >
+                                        {i18n.copyLink}
+                                    </Button>
+                                    <Button
+                                        variant="textDelete"
+                                        onClick={() => {
+                                            setOpenDialogDeleteClip(true)
+                                            setOpenMenu(false)
+                                        }}
+                                    >
                                         {i18n.delete}
                                     </Button>
                                 </div>
@@ -116,12 +143,14 @@ const ClipItem = ({ name, link, id, onDeleted }: ClipItemProps) => {
                     buttonText={i18n.confirm}
                     onButtonClick={handleDeleteClip}
                     secondaryButtonText={i18n.cancel}
-                    onSecondaryButtonClick={() => setOpenDialogDeleteClip(false)}
+                    onSecondaryButtonClick={() =>
+                        setOpenDialogDeleteClip(false)
+                    }
                     horizontalButtons
                 >
                     <Text>
                         {template(i18n.confirmDeleteClip)({
-                            name: name
+                            name: name,
                         })}
                     </Text>
                 </Dialog>

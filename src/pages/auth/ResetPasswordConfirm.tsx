@@ -77,15 +77,22 @@ const ResetPasswordConfirm = () => {
                 alignItems: 'center',
             }}
         >
-            <Card width='lg'>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>{i18n.resetPassword}</h2>
+            <Card width="lg">
+                <form
+                    onSubmit={handleSubmit}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
+                        {i18n.resetPassword}
+                    </h2>
 
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem'
-                    }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                        }}
+                    >
                         <TextField
                             label={i18n.newPassword}
                             type="password"
@@ -114,8 +121,16 @@ const ResetPasswordConfirm = () => {
                             error={passwordConfirmError}
                         />
 
-                        {errorMessage && <Text size="sm" color={redError}>{errorMessage}</Text>}
-                        {message && <Text size="sm" color={greenValidation}>{message}</Text>}
+                        {errorMessage && (
+                            <Text size="sm" color={redError}>
+                                {errorMessage}
+                            </Text>
+                        )}
+                        {message && (
+                            <Text size="sm" color={greenValidation}>
+                                {message}
+                            </Text>
+                        )}
                     </div>
 
                     <div style={{ paddingTop: '1.5rem' }}>
@@ -125,7 +140,7 @@ const ResetPasswordConfirm = () => {
                     </div>
                 </form>
             </Card>
-            {openDialog &&
+            {openDialog && (
                 <Dialog
                     title={i18n.passwordSuccesfullyUpdated}
                     onButtonClick={() => {
@@ -136,7 +151,7 @@ const ResetPasswordConfirm = () => {
                 >
                     {i18n.passwordSuccesfullyUpdatedcontent}
                 </Dialog>
-            }
+            )}
         </div>
     )
 }

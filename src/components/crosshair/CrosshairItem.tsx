@@ -13,19 +13,20 @@ import { deleteCrosshairWithImage } from '@utils/db/crosshairs.ts'
 import IconButton from '@components/ui/buttons/IconButton.tsx'
 
 type CrosshairItemProps = {
-    id: string,
+    id: string
     data: {
-        name: string,
-        image: string,
-        code: string,
+        name: string
+        image: string
+        code: string
         type: string
-    },
+    }
     onDelete?: (id: string) => void
 }
 
 const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
     const [openMenu, setOpenMenu] = useState(false)
-    const [openDialogDeleteCrosshair, setOpenDialogDeleteCrosshair] = useState(false)
+    const [openDialogDeleteCrosshair, setOpenDialogDeleteCrosshair] =
+        useState(false)
     const [toastVisible, setToastVisible] = useState(false)
     const [toastMessage, setToastMessage] = useState('')
 
@@ -33,12 +34,16 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (ellipsisRef.current && !ellipsisRef.current.contains(event.target as Node)) {
+            if (
+                ellipsisRef.current &&
+                !ellipsisRef.current.contains(event.target as Node)
+            ) {
                 setOpenMenu(false)
             }
         }
         if (openMenu) document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
+        return () =>
+            document.removeEventListener('mousedown', handleClickOutside)
     }, [openMenu])
 
     const handleDeleteCrosshair = async () => {
@@ -57,9 +62,11 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
         copyText(code)
             .then(() => {
                 setToastVisible(true)
-                setToastMessage(template(i18n.validationCopy)({
-                    name: data.name
-                }))
+                setToastMessage(
+                    template(i18n.validationCopy)({
+                        name: data.name,
+                    }),
+                )
             })
             .catch((e) => {
                 setToastVisible(true)
@@ -78,12 +85,20 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
                     gap: '0.5rem',
                 }}
             >
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}
+                >
                     <div />
-                    <Text weight='bold' style={{ overflow: 'hidden' }}>{data.name}</Text>
+                    <Text weight="bold" style={{ overflow: 'hidden' }}>
+                        {data.name}
+                    </Text>
                     {onDelete ? (
                         <div ref={ellipsisRef} style={{ position: 'relative' }}>
-                            <IconButton variant='light'>
+                            <IconButton variant="light">
                                 <Ellipsis
                                     size="1rem"
                                     onClick={() => setOpenMenu(!openMenu)}
@@ -101,24 +116,31 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
                                         borderRadius: '0.5rem',
                                         padding: '0.5rem',
                                         boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                                        zIndex: 100
+                                        zIndex: 100,
                                     }}
                                 >
-                                    <Button variant="textDelete" onClick={() => {
-                                        setOpenDialogDeleteCrosshair(true)
-                                        setOpenMenu(false)
-                                    }}>{i18n.delete}</Button>
+                                    <Button
+                                        variant="textDelete"
+                                        onClick={() => {
+                                            setOpenDialogDeleteCrosshair(true)
+                                            setOpenMenu(false)
+                                        }}
+                                    >
+                                        {i18n.delete}
+                                    </Button>
                                 </div>
                             )}
                         </div>
-                    ) : <div />}
+                    ) : (
+                        <div />
+                    )}
                 </div>
                 <div
                     style={{
                         height: '160px',
                         width: '160px',
                         backgroundImage: `url(${data.image})`,
-                        backgroundSize: 'cover'
+                        backgroundSize: 'cover',
                     }}
                 />
                 <Button
@@ -140,12 +162,14 @@ const CrosshairItem = ({ id, data, onDelete }: CrosshairItemProps) => {
                         buttonText={i18n.confirm}
                         onButtonClick={handleDeleteCrosshair}
                         secondaryButtonText={i18n.cancel}
-                        onSecondaryButtonClick={() => setOpenDialogDeleteCrosshair(false)}
+                        onSecondaryButtonClick={() =>
+                            setOpenDialogDeleteCrosshair(false)
+                        }
                         horizontalButtons
                     >
                         <Text>
                             {template(i18n.confirmDeleteCrossair)({
-                                name: data.name
+                                name: data.name,
                             })}
                         </Text>
                     </Dialog>

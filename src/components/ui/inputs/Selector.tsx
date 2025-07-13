@@ -10,15 +10,22 @@ type Options = {
 }
 
 type SelectorProps = {
-    label: string,
-    options: Options[],
-    value: string,
-    onChange: (value: string) => void,
-    error?: string,
-    placeholder?: string,
+    label: string
+    options: Options[]
+    value: string
+    onChange: (value: string) => void
+    error?: string
+    placeholder?: string
 }
 
-const Selector = ({ label, options, value, onChange, error, placeholder }: SelectorProps) => {
+const Selector = ({
+    label,
+    options,
+    value,
+    onChange,
+    error,
+    placeholder,
+}: SelectorProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [hoveredOption, setHoveredOption] = useState<string | null>(null)
 
@@ -30,7 +37,7 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
                     display: 'block',
                     fontWeight: 'bold',
                     marginBottom: '0.5rem',
-                    cursor: 'text'
+                    cursor: 'text',
                 }}
             >
                 {label}
@@ -47,11 +54,14 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     position: 'relative',
-                    transition: 'background-color 0.2s ease'
+                    transition: 'background-color 0.2s ease',
                 }}
-                onClick={() => setIsOpen(prev => !prev)}
+                onClick={() => setIsOpen((prev) => !prev)}
             >
-                <span>{options.find(option => option.id === value)?.label || placeholder}</span>
+                <span>
+                    {options.find((option) => option.id === value)?.label ||
+                        placeholder}
+                </span>
 
                 <ChevronDown
                     width="16"
@@ -82,7 +92,7 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
                         listStyle: 'none',
                     }}
                 >
-                    {options.map(option => {
+                    {options.map((option) => {
                         const isSelected = option.id === value
                         const isHovered = hoveredOption === option.id
 
@@ -92,8 +102,12 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
                                 style={{
                                     padding: '0.5rem',
                                     cursor: 'pointer',
-                                    backgroundColor: isSelected ? mainGrey : isHovered ? lightGrey : mainWhite,
-                                    transition: 'background-color 0.2s ease'
+                                    backgroundColor: isSelected
+                                        ? mainGrey
+                                        : isHovered
+                                          ? lightGrey
+                                          : mainWhite,
+                                    transition: 'background-color 0.2s ease',
                                 }}
                                 onClick={() => {
                                     onChange(option.id)
@@ -110,7 +124,7 @@ const Selector = ({ label, options, value, onChange, error, placeholder }: Selec
             )}
 
             {error && (
-                <Text color={mainRed} size='sm' style={{ marginTop: '0.5rem' }}>
+                <Text color={mainRed} size="sm" style={{ marginTop: '0.5rem' }}>
                     {error}
                 </Text>
             )}

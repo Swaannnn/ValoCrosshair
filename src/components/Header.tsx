@@ -26,17 +26,34 @@ const Header = () => {
                 zIndex: 1000,
             }}
         >
-            <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+            <nav
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: '100%',
+                }}
+            >
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Link to='/' style={buttonHeaderStyle}>{i18n.home}</Link>
-                    <Link to='/about' style={buttonHeaderStyle}>{i18n.about}</Link>
+                    <Link to="/" style={buttonHeaderStyle}>
+                        {i18n.home}
+                    </Link>
+                    <Link to="/about" style={buttonHeaderStyle}>
+                        {i18n.about}
+                    </Link>
+                    <Link to="/crosshairs" style={buttonHeaderStyle}>
+                        {i18n.crosshairs}
+                    </Link>
                 </div>
                 {userId ? (
-                    <Link to='/account' style={buttonHeaderStyle}>{i18n.account}</Link>
+                    <Link to="/account" style={buttonHeaderStyle}>
+                        {i18n.account}
+                    </Link>
                 ) : (
-                    <Link to='/login' style={buttonHeaderStyle}>{i18n.login}</Link>
+                    <Link to="/login" style={buttonHeaderStyle}>
+                        {i18n.login}
+                    </Link>
                 )}
-
             </nav>
         </header>
     )

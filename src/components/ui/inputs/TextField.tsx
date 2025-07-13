@@ -12,12 +12,24 @@ interface TextFieldProps {
     placeholder?: string
 }
 
-const TextField = ({ label, type = 'text', value, onChange, error, placeholder }: TextFieldProps) => {
+const TextField = ({
+    label,
+    type = 'text',
+    value,
+    onChange,
+    error,
+    placeholder,
+}: TextFieldProps) => {
     return (
         <div style={{ width: '100%' }}>
             <label
                 htmlFor={label}
-                style={{ display: 'block', fontWeight: 'bold', marginBottom: '0.5rem', cursor: 'text' }}
+                style={{
+                    display: 'block',
+                    fontWeight: 'bold',
+                    marginBottom: '0.5rem',
+                    cursor: 'text',
+                }}
             >
                 {label}
             </label>
@@ -38,7 +50,7 @@ const TextField = ({ label, type = 'text', value, onChange, error, placeholder }
             />
 
             {error && (
-                <Text color={mainRed} size='sm' style={{ marginTop: '0.5rem' }}>
+                <Text color={mainRed} size="sm" style={{ marginTop: '0.5rem' }}>
                     {error}
                 </Text>
             )}

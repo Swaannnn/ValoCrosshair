@@ -14,8 +14,21 @@ import Dialog from '@components/ui/Dialog.tsx'
 import Card from '@components/ui/Card.tsx'
 import ClipsSection from '@components/clip/ClipsSection.tsx'
 import CrosshairsSection from '@components/crosshair/CrosshairsSection.tsx'
+import { User, Crosshair, Film, Info, LogOut } from 'lucide-react'
 
-const sectionIds = ['myProfile', 'myCrosshairs', 'myClips', 'myPersonalsInformations']
+const sectionIds = [
+    'myProfile',
+    'myCrosshairs',
+    'myClips',
+    'myPersonalsInformations',
+]
+
+const sectionIcons: Record<string, React.ReactNode> = {
+    myProfile: <User size={20} />,
+    myCrosshairs: <Crosshair size={20} />,
+    myClips: <Film size={20} />,
+    myPersonalsInformations: <Info size={20} />,
+}
 
 const Account = () => {
     const userId = useSession()
@@ -27,7 +40,7 @@ const Account = () => {
 
     useEffect(() => {
         getUserBasicInfo()
-            .then(userInfo => setUserBasicInfo(userInfo))
+            .then((userInfo) => setUserBasicInfo(userInfo))
             .finally(() => setLoading(false))
     }, [])
 
@@ -62,7 +75,10 @@ const Account = () => {
         const target = document.getElementById(id)
         if (target) {
             const headerOffset = -(parseInt(headerHeight) + 16)
-            const y = target.getBoundingClientRect().top + window.scrollY + headerOffset
+            const y =
+                target.getBoundingClientRect().top +
+                window.scrollY +
+                headerOffset
             window.scrollTo({ top: y, behavior: 'smooth' })
             window.history.replaceState(null, '', `#${id}`)
 
@@ -70,7 +86,10 @@ const Account = () => {
         }
     }
 
-    const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    const handleAnchorClick = (
+        e: React.MouseEvent<HTMLAnchorElement>,
+        id: string,
+    ) => {
         e.preventDefault()
         scrollToSection(id)
     }
@@ -80,45 +99,129 @@ const Account = () => {
         location.reload()
     }
 
+    const renderMenuLink = (id: string, icon: React.ReactNode) => {
+        const isActive = activeSection === id
+
+        return (
+            <Link
+                key={id}
+                to={`/account/#${id}`}
+                onClick={(e) => handleAnchorClick(e, id)}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    color: 'black',
+                }}
+                onMouseEnter={(e) => {
+                    const iconElement =
+                        e.currentTarget.querySelector('.menu-icon')
+                    if (iconElement)
+                        iconElement.setAttribute('style', 'color: red')
+                }}
+                onMouseLeave={(e) => {
+                    const iconElement =
+                        e.currentTarget.querySelector('.menu-icon')
+                    if (iconElement && !isActive)
+                        iconElement.setAttribute('style', 'color: black')
+                }}
+            >
+                <span
+                    className="menu-icon"
+                    style={{
+                        color: isActive ? 'red' : 'black',
+                        transition: 'color 0.3s',
+                    }}
+                >
+                    {icon}
+                </span>
+                <Text style={{ color: 'black', textDecoration: 'none' }}>
+                    {i18n[id] ?? id}
+                </Text>
+            </Link>
+        )
+    }
+
     if (loading) return <Loader />
 
     return (
         <div style={{ display: 'flex', padding: '1rem' }}>
-            <div style={{ width: '25%' }}>
-                <div style={{ position: 'fixed', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <Text size="lg" weight="bold">{i18n.myAccount}</Text>
-                    {sectionIds.map(id => (
-                        <Link
-                            key={id}
-                            to={`/account/#${id}`}
-                            onClick={(e) => handleAnchorClick(e, id)}
-                        >
-                            <span
-                                style={{
-                                    fontWeight: activeSection === id ? 'bold' : 'normal',
-                                    color: activeSection === id ? 'red' : 'inherit',
-                                    transition: 'color 0.3s',
-                                }}
-                            >
-                                {i18n[id] ?? id}
-                            </span>
-                        </Link>
-                    ))}
+            <div
+                style={{
+                    height: '50vh',
+                    width: '25%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <div
+                    style={{
+                        position: 'fixed',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.5rem',
+                    }}
+                >
+                    <Text size="xl" weight="bold">
+                        {i18n.myAccount}
+                    </Text>
+
+                    {sectionIds.map((id) =>
+                        renderMenuLink(id, sectionIcons[id]),
+                    )}
+
                     <Link
                         to={'/account'}
                         onClick={() => setOpenDialogLogout(true)}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            color: 'black',
+                        }}
                     >
-                        <span style={{ transition: 'color 0.3s' }}>
-                            {i18n.logout}
+                        <span
+                            style={{
+                                color: 'black',
+                                transition: 'color 0.3s',
+                            }}
+                            onMouseEnter={(e) =>
+                                (e.currentTarget.style.color = 'red')
+                            }
+                            onMouseLeave={(e) =>
+                                (e.currentTarget.style.color = 'black')
+                            }
+                        >
+                            <LogOut size={20} />
                         </span>
+                        <Text
+                            style={{ color: 'black', textDecoration: 'none' }}
+                        >
+                            {i18n.logout}
+                        </Text>
                     </Link>
                 </div>
             </div>
 
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                }}
+            >
                 <div id="myProfile">
                     {userBasicInfo && (
-                        <ProfileSection userId={userId} userInfos={userBasicInfo}/>
+                        <ProfileSection
+                            userId={userId}
+                            userInfos={userBasicInfo}
+                        />
                     )}
                 </div>
 
@@ -137,7 +240,9 @@ const Account = () => {
                 <div id="myPersonalsInformations">
                     <Card width="full">
                         {/* <PersonalsInformationsSection /> */}
-                        <Text size="lg" weight="bold">{i18n.myPersonalsInformations}</Text>
+                        <Text size="lg" weight="bold">
+                            {i18n.myPersonalsInformations}
+                        </Text>
                     </Card>
                 </div>
             </div>

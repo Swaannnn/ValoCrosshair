@@ -10,20 +10,24 @@ let jsonArr: LangEntry[] = []
 
 const foundLang = (arr: LangEntry[], lang: Lang): LangEntry | undefined => {
     const exact = arr.find(
-        el => Array.isArray(el.lang) && el.lang[0] === lang[0] && el.lang[1] === lang[1]
+        (el) =>
+            Array.isArray(el.lang) &&
+            el.lang[0] === lang[0] &&
+            el.lang[1] === lang[1],
     )
     if (exact) return exact
-    return arr.find(
-        el => Array.isArray(el.lang) && el.lang[0] === lang[0]
-    )
+    return arr.find((el) => Array.isArray(el.lang) && el.lang[0] === lang[0])
 }
 
 const register = (
     json: Record<string, string | number | boolean | Record<string, unknown>>,
-    lang: Lang | 'default'
+    lang: Lang | 'default',
 ): void => {
-    const existing = jsonArr.find(j =>
-        Array.isArray(j.lang) && Array.isArray(lang) && j.lang.toString() === lang.toString()
+    const existing = jsonArr.find(
+        (j) =>
+            Array.isArray(j.lang) &&
+            Array.isArray(lang) &&
+            j.lang.toString() === lang.toString(),
     )
     if (existing) {
         jsonArr.splice(jsonArr.indexOf(existing), 1)
@@ -35,18 +39,21 @@ const register = (
 }
 
 const init = (): void => {
-    const navLang = navigator.language || (navigator as Navigator & { userLanguage?: string }).userLanguage || 'en'
+    const navLang =
+        navigator.language ||
+        (navigator as Navigator & { userLanguage?: string }).userLanguage ||
+        'en'
     const userLgMatch = navLang.match(/([a-z]{2})/gi)
     const userLg: Lang = [userLgMatch?.[0] ?? 'en', userLgMatch?.[1]]
     const jsonlg = foundLang(jsonArr, userLg)
-    const defaut = jsonArr.find(el => el.lang === 'default')
+    const defaut = jsonArr.find((el) => el.lang === 'default')
     if (jsonlg) {
         jsonObj = Object.fromEntries(
-            Object.entries(jsonlg.json) as [string, string][]
+            Object.entries(jsonlg.json) as [string, string][],
         )
     } else if (defaut) {
         jsonObj = Object.fromEntries(
-            Object.entries(defaut.json) as [string, string][]
+            Object.entries(defaut.json) as [string, string][],
         )
     } else throw new Error('Cannot find matching language')
 }

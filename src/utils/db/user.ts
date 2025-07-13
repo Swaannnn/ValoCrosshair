@@ -17,7 +17,9 @@ const getUserBasicInfo = async () => {
 const getUserProfile = async (userId: string): Promise<Profile | null> => {
     const { data, error } = await supabase
         .from('profiles')
-        .select('user_id, nickname, avatar_url, updated_at, riot_id, banner_url, rank, platform')
+        .select(
+            'user_id, nickname, avatar_url, updated_at, riot_id, banner_url, rank, platform',
+        )
         .eq('user_id', userId)
         .single()
 
@@ -41,18 +43,16 @@ const editUserProfile = async (profile: {
     rank?: string
     platform?: string
 }): Promise<boolean> => {
-    const { error } = await supabase
-        .from('profiles')
-        .upsert({
-            user_id: profile.user_id,
-            nickname: profile.nickname ?? null,
-            riot_id: profile.riot_id ?? null,
-            avatar_url: profile.avatar_url ?? null,
-            banner_url: profile.banner_url ?? null,
-            updated_at: new Date().toISOString(),
-            rank: profile.rank ?? null,
-            platform: profile.platform ?? null,
-        })
+    const { error } = await supabase.from('profiles').upsert({
+        user_id: profile.user_id,
+        nickname: profile.nickname ?? null,
+        riot_id: profile.riot_id ?? null,
+        avatar_url: profile.avatar_url ?? null,
+        banner_url: profile.banner_url ?? null,
+        updated_at: new Date().toISOString(),
+        rank: profile.rank ?? null,
+        platform: profile.platform ?? null,
+    })
 
     if (error) {
         console.error('Erreur upsertProfile:', error.message)
@@ -62,6 +62,4 @@ const editUserProfile = async (profile: {
     return true
 }
 
-export {
-    getUserProfile, getUserBasicInfo, editUserProfile
-}
+export { getUserProfile, getUserBasicInfo, editUserProfile }

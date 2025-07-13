@@ -5,13 +5,13 @@ import { mediumRadius } from '@constants/sizes.ts'
 import React, { useEffect, useRef } from 'react'
 
 type DialogProps = {
-    title: string,
-    children: React.ReactNode,
-    buttonText: string,
-    onButtonClick: () => void,
-    secondaryButtonText?: string,
-    onSecondaryButtonClick?: () => void,
-    horizontalButtons?: boolean,
+    title: string
+    children: React.ReactNode
+    buttonText: string
+    onButtonClick: () => void
+    secondaryButtonText?: string
+    onSecondaryButtonClick?: () => void
+    horizontalButtons?: boolean
 }
 
 const Dialog = ({
@@ -69,22 +69,27 @@ const Dialog = ({
                     zIndex: 10000,
                 }}
             >
-                <Text size='lg' weight='bold'>{title}</Text>
+                <Text size="lg" weight="bold">
+                    {title}
+                </Text>
                 {children}
-                <div style={{
-                    display: 'flex',
-                    flexDirection: horizontalButtons ? 'row' : 'column',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                }}>
-                    <Button onClick={onButtonClick}>
-                        {buttonText}
-                    </Button>
-                    {secondaryButtonText &&
-                        <Button variant='outlined' onClick={onSecondaryButtonClick}>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: horizontalButtons ? 'row' : 'column',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                    }}
+                >
+                    <Button onClick={onButtonClick}>{buttonText}</Button>
+                    {secondaryButtonText && (
+                        <Button
+                            variant="outlined"
+                            onClick={onSecondaryButtonClick}
+                        >
                             {secondaryButtonText}
                         </Button>
-                    }
+                    )}
                 </div>
             </div>
         </div>

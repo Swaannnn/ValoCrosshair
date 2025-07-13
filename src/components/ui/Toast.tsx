@@ -4,10 +4,10 @@ import { mediumRadius } from '@constants/sizes.ts'
 import Text from '@components/ui/Text.tsx'
 
 type ToastProps = {
-	message: string
+    message: string
     icon?: ReactNode
-	onClose: () => void
-	duration?: number
+    onClose: () => void
+    duration?: number
 }
 
 const Toast = ({ message, icon, onClose, duration = 5000 }: ToastProps) => {

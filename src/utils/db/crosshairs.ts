@@ -1,7 +1,12 @@
 import { supabase } from '@/lib/supabaseClient'
 import type { Crosshair } from '@/types/types.ts'
 
-export const addCrosshair = async (code: string, name: string, imageUrl: string, category: string) => {
+export const addCrosshair = async (
+    code: string,
+    name: string,
+    imageUrl: string,
+    category: string,
+) => {
     const { data, error } = await supabase
         .from('crosshairs')
         .insert([{ code, name, image_url: imageUrl, category }])
@@ -14,7 +19,9 @@ export const addCrosshair = async (code: string, name: string, imageUrl: string,
     return { id: data?.[0]?.id }
 }
 
-export const getUserCrosshairs = async (userId: string): Promise<Crosshair[] | null> => {
+export const getUserCrosshairs = async (
+    userId: string,
+): Promise<Crosshair[] | null> => {
     const { data, error } = await supabase
         .from('crosshairs')
         .select('id, created_at, code, name, image_url, category, user_id')
@@ -27,7 +34,9 @@ export const getUserCrosshairs = async (userId: string): Promise<Crosshair[] | n
     return data
 }
 
-export const getUserCrosshairCount = async (userId: string): Promise<number | null> => {
+export const getUserCrosshairCount = async (
+    userId: string,
+): Promise<number | null> => {
     const { count, error } = await supabase
         .from('crosshairs')
         .select('*', { count: 'exact', head: true })
@@ -40,9 +49,10 @@ export const getUserCrosshairCount = async (userId: string): Promise<number | nu
     return count ?? 0
 }
 
-
-
-export const deleteCrosshairWithImage = async (crosshairId: string, imageUrl: string): Promise<{ error: Error | null }> => {
+export const deleteCrosshairWithImage = async (
+    crosshairId: string,
+    imageUrl: string,
+): Promise<{ error: Error | null }> => {
     try {
         const { error: dbError } = await supabase
             .from('crosshairs')
@@ -67,12 +77,18 @@ export const deleteCrosshairWithImage = async (crosshairId: string, imageUrl: st
             .remove([path])
 
         if (storageError) {
-            console.error('Erreur suppression image dans Supabase Storage:', storageError)
+            console.error(
+                'Erreur suppression image dans Supabase Storage:',
+                storageError,
+            )
         }
 
         return { error: null }
     } catch (err) {
-        console.error('Erreur inattendue lors de la suppression du crosshair:', err)
+        console.error(
+            'Erreur inattendue lors de la suppression du crosshair:',
+            err,
+        )
         return { error: err as Error }
     }
 }

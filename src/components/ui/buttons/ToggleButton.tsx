@@ -3,33 +3,46 @@ import { darkRed1, lightRed, mainRed, mainWhite } from '@constants/colors.ts'
 import { mediumRadius } from '@constants/sizes.ts'
 
 type ToggleButtonProps = {
-	selected: boolean
-	children: ReactNode
-	onClick?: () => void
-	endIcon?: ReactNode
+    selected: boolean
+    children: ReactNode
+    onClick?: () => void
+    endIcon?: ReactNode
 }
 
 const getButtonStyle = (
     selected: boolean,
     isHovered: boolean,
-    isActive: boolean
+    isActive: boolean,
 ): CSSProperties => {
     if (selected) {
         return {
-            backgroundColor: isActive ? darkRed1 : isHovered ? lightRed : mainRed,
+            backgroundColor: isActive
+                ? darkRed1
+                : isHovered
+                  ? lightRed
+                  : mainRed,
             color: mainWhite,
-	        border: `1px solid ${isActive ? darkRed1 : mainRed}`
+            border: `1px solid ${isActive ? darkRed1 : mainRed}`,
         }
     } else {
         return {
-            backgroundColor: isActive ? darkRed1 : isHovered ? lightRed : 'transparent',
+            backgroundColor: isActive
+                ? darkRed1
+                : isHovered
+                  ? lightRed
+                  : 'transparent',
             color: isHovered ? mainWhite : mainRed,
-            border: `1px solid ${isActive ? darkRed1 : mainRed}`
+            border: `1px solid ${isActive ? darkRed1 : mainRed}`,
         }
     }
 }
 
-const ToggleButton = ({ selected, children, onClick, endIcon }: ToggleButtonProps) => {
+const ToggleButton = ({
+    selected,
+    children,
+    onClick,
+    endIcon,
+}: ToggleButtonProps) => {
     const [isHovered, setHovered] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
@@ -49,7 +62,7 @@ const ToggleButton = ({ selected, children, onClick, endIcon }: ToggleButtonProp
                 transition: 'all 150ms ease-in-out',
                 fontWeight: 600,
                 fontFamily: '"Open Sans", sans-serif',
-                ...buttonStyle
+                ...buttonStyle,
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseDown={() => setIsActive(true)}

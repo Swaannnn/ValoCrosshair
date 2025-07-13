@@ -3,13 +3,18 @@ import { roundedRadius } from '@constants/sizes.ts'
 import { lightGrey, mainGrey, mainWhite } from '@constants/colors.ts'
 
 type IconButtonProps = {
-	size?: string,
-    variant?: 'primary' | 'light',
-	children?: ReactNode,
-	onClick?: () => void,
+    size?: string
+    variant?: 'primary' | 'light'
+    children?: ReactNode
+    onClick?: () => void
 }
 
-const IconButton = ({ children, variant = 'primary', size, onClick }: IconButtonProps) => {
+const IconButton = ({
+    children,
+    variant = 'primary',
+    size,
+    onClick,
+}: IconButtonProps) => {
     const [isHovered, setIsHovered] = useState(false)
 
     const primary = variant === 'primary'
@@ -34,7 +39,8 @@ const IconButton = ({ children, variant = 'primary', size, onClick }: IconButton
                 height: size,
                 width: size,
 
-                transition: 'background-color 0.2s ease, border-color 0.2s ease',
+                transition:
+                    'background-color 0.2s ease, border-color 0.2s ease',
             }}
         >
             {children}

@@ -9,9 +9,11 @@ export const useSession = () => {
             if (data.user) setUserId(data.user.id)
         })
 
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUserId(session?.user?.id ?? null)
-        })
+        const { data: listener } = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setUserId(session?.user?.id ?? null)
+            },
+        )
 
         return () => {
             listener.subscription.unsubscribe()

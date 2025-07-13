@@ -34,10 +34,14 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
     const [riotIdError, setRiotIdError] = useState('')
     const [avatarUrl, setAvatarUrl] = useState('')
     const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null)
-    const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
+    const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(
+        null,
+    )
     const [bannerUrl, setBannerUrl] = useState('')
     const [newBannerFile, setNewBannerFile] = useState<File | null>(null)
-    const [previewBannerUrl, setPreviewBannerUrl] = useState<string | null>(null)
+    const [previewBannerUrl, setPreviewBannerUrl] = useState<string | null>(
+        null,
+    )
     const [rank, setRank] = useState('')
     const [platform, setPlatform] = useState('')
     const [loading, setLoading] = useState(false)
@@ -45,15 +49,31 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
 
     const ranks = [
         { id: 'unranked', label: i18n.unranked },
-        { id: 'iron1', label: i18n.iron1 }, { id: 'iron2', label: i18n.iron2 }, { id: 'iron3', label: i18n.iron3 },
-        { id: 'bronze1', label: i18n.bronze1 }, { id: 'bronze2', label: i18n.bronze2 }, { id: 'bronze3', label: i18n.bronze3 },
-        { id: 'silver1', label: i18n.silver1 }, { id: 'silver2', label: i18n.silver2 }, { id: 'silver3', label: i18n.silver3 },
-        { id: 'gold1', label: i18n.gold1 }, { id: 'gold2', label: i18n.gold2 }, { id: 'gold3', label: i18n.gold3 },
-        { id: 'platinum1', label: i18n.platinum1 }, { id: 'platinum2', label: i18n.platinum2 }, { id: 'platinum2', label: i18n.platinum3 },
-        { id: 'diamond1', label: i18n.diamond1 }, { id: 'diamond2', label: i18n.diamond2 }, { id: 'diamond3', label: i18n.diamond3 },
-        { id: 'ascendant1', label: i18n.ascendant1 }, { id: 'ascendant2', label: i18n.ascendant2 }, { id: 'ascendant3', label: i18n.ascendant3 },
-        { id: 'immortal1', label: i18n.immortal1 }, { id: 'immortal2', label: i18n.immortal2 }, { id: 'immortal3', label: i18n.immortal3 },
-        { id: 'radiant', label: i18n.radiant }
+        { id: 'iron1', label: i18n.iron1 },
+        { id: 'iron2', label: i18n.iron2 },
+        { id: 'iron3', label: i18n.iron3 },
+        { id: 'bronze1', label: i18n.bronze1 },
+        { id: 'bronze2', label: i18n.bronze2 },
+        { id: 'bronze3', label: i18n.bronze3 },
+        { id: 'silver1', label: i18n.silver1 },
+        { id: 'silver2', label: i18n.silver2 },
+        { id: 'silver3', label: i18n.silver3 },
+        { id: 'gold1', label: i18n.gold1 },
+        { id: 'gold2', label: i18n.gold2 },
+        { id: 'gold3', label: i18n.gold3 },
+        { id: 'platinum1', label: i18n.platinum1 },
+        { id: 'platinum2', label: i18n.platinum2 },
+        { id: 'platinum2', label: i18n.platinum3 },
+        { id: 'diamond1', label: i18n.diamond1 },
+        { id: 'diamond2', label: i18n.diamond2 },
+        { id: 'diamond3', label: i18n.diamond3 },
+        { id: 'ascendant1', label: i18n.ascendant1 },
+        { id: 'ascendant2', label: i18n.ascendant2 },
+        { id: 'ascendant3', label: i18n.ascendant3 },
+        { id: 'immortal1', label: i18n.immortal1 },
+        { id: 'immortal2', label: i18n.immortal2 },
+        { id: 'immortal3', label: i18n.immortal3 },
+        { id: 'radiant', label: i18n.radiant },
     ]
 
     const platforms = [
@@ -97,7 +117,11 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
 
         let finalAvatarUrl = avatarUrl
         if (newAvatarFile) {
-            const uploaded = await uploadToSupabase(newAvatarFile, userId, 'avatar')
+            const uploaded = await uploadToSupabase(
+                newAvatarFile,
+                userId,
+                'avatar',
+            )
             if (uploaded) {
                 finalAvatarUrl = uploaded
                 setAvatarUrl(uploaded)
@@ -106,7 +130,11 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
 
         let finalBannerUrl = bannerUrl
         if (newBannerFile) {
-            const uploaded = await uploadToSupabase(newBannerFile, userId, 'banner')
+            const uploaded = await uploadToSupabase(
+                newBannerFile,
+                userId,
+                'banner',
+            )
             if (uploaded) {
                 finalBannerUrl = uploaded
                 setBannerUrl(uploaded)
@@ -120,7 +148,7 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
             avatar_url: finalAvatarUrl,
             banner_url: finalBannerUrl,
             rank,
-            platform
+            platform,
         })
 
         if (!success) {
@@ -129,15 +157,19 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
             return
         }
 
-        setProfile(prev => prev ? {
-            ...prev,
-            nickname,
-            riot_id: riotId,
-            avatar_url: finalAvatarUrl,
-            banner_url: finalBannerUrl,
-            rank,
-            platform
-        } : null)
+        setProfile((prev) =>
+            prev
+                ? {
+                      ...prev,
+                      nickname,
+                      riot_id: riotId,
+                      avatar_url: finalAvatarUrl,
+                      banner_url: finalBannerUrl,
+                      rank,
+                      platform,
+                  }
+                : null,
+        )
 
         setNewAvatarFile(null)
         setPreviewAvatarUrl(null)
@@ -152,33 +184,53 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
         <Card width="full">
             <h2>{i18n.myProfile}</h2>
             <div style={{ paddingTop: '0.5rem' }}>
-                {(loading || !profile || !userId) ? (
-                    <ProgressBar title='Chargement du profil en cours...' />
+                {loading || !profile || !userId ? (
+                    <ProgressBar title="Chargement du profil en cours..." />
                 ) : (
                     <>
                         <div style={{ position: 'relative' }}>
-                            <div style={{ width: '100%', height: bannerHeight, overflow: 'hidden' }}>
+                            <div
+                                style={{
+                                    width: '100%',
+                                    height: bannerHeight,
+                                    overflow: 'hidden',
+                                }}
+                            >
                                 <img
-                                    src={previewBannerUrl || bannerUrl || DefaultBanner}
+                                    src={
+                                        previewBannerUrl ||
+                                        bannerUrl ||
+                                        DefaultBanner
+                                    }
                                     alt="user banner"
                                     style={{
                                         width: '100%',
                                         height: '100%',
-                                        objectFit: 'cover'
+                                        objectFit: 'cover',
                                     }}
                                 />
                             </div>
-                            {editProfile &&
-                                <div style={{ position: 'absolute', bottom: 'calc(58px + 0.5rem)', right: '0.5rem', zIndex: 100 }}>
+                            {editProfile && (
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 'calc(58px + 0.5rem)',
+                                        right: '0.5rem',
+                                        zIndex: 100,
+                                    }}
+                                >
                                     <FileUploader action={handleUpdateBanner}>
-                                        <Tooltip position='bottom-left' content={i18n.addBannerToolip}>
+                                        <Tooltip
+                                            position="bottom-left"
+                                            content={i18n.addBannerToolip}
+                                        >
                                             <IconButton size="40px">
                                                 <Pencil />
                                             </IconButton>
                                         </Tooltip>
                                     </FileUploader>
                                 </div>
-                            }
+                            )}
                             <div
                                 style={{
                                     position: 'absolute',
@@ -188,7 +240,7 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                     height: avatarSize,
                                     borderRadius: '50%',
                                     border: `4px solid ${mainWhite}`,
-                                    backgroundColor: '#fff'
+                                    backgroundColor: '#fff',
                                 }}
                             >
                                 <img
@@ -202,19 +254,28 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                     }}
                                 />
                                 {editProfile && (
-                                    <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', zIndex: 100 }}>
-                                        <label style={{ display: 'inline-block', cursor: 'pointer' }}>
-                                            <FileUploader action={handleUpdateAvatar}>
-                                                <Tooltip position='bottom' content={i18n.addAvatarToolip}>
-                                                    <IconButton size="40px">
-                                                        <Pencil />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </FileUploader>
-                                        </label>
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: '1rem',
+                                            right: '1rem',
+                                            zIndex: 100,
+                                        }}
+                                    >
+                                        <FileUploader
+                                            action={handleUpdateAvatar}
+                                        >
+                                            <Tooltip
+                                                position="bottom"
+                                                content={i18n.addAvatarToolip}
+                                            >
+                                                <IconButton size="40px">
+                                                    <Pencil />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </FileUploader>
                                     </div>
                                 )}
-
                             </div>
                             <div
                                 style={{
@@ -223,20 +284,50 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                     justifyContent: 'space-between',
                                 }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    {profile.rank &&
-                                        <img src={`/images/ranks/${profile.rank}.png`} style={{ height: '40px', width: '40px' }} alt='user rank'/>
-                                    }
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.5rem',
+                                    }}
+                                >
+                                    {profile.rank && (
+                                        <img
+                                            src={`/images/ranks/${profile.rank}.png`}
+                                            style={{
+                                                height: '40px',
+                                                width: '40px',
+                                            }}
+                                            alt="user rank"
+                                        />
+                                    )}
                                     <div>
                                         {profile.nickname && (
                                             <Text size="lg" weight="bold">
-                                                {compact([profile.nickname, profile.riot_id]).join(' - ')}
+                                                {compact([
+                                                    profile.nickname,
+                                                    profile.riot_id,
+                                                ]).join(' - ')}
                                             </Text>
                                         )}
-                                        {userInfos.created_at && <Text>Membre depuis : {formatDateToLong(userInfos.created_at)}</Text>}
+                                        {userInfos.created_at && (
+                                            <Text>
+                                                Membre depuis :{' '}
+                                                {formatDateToLong(
+                                                    userInfos.created_at,
+                                                )}
+                                            </Text>
+                                        )}
                                     </div>
                                 </div>
-                                {!editProfile && <Button variant='secondary' onClick={() => setEditProfile(true)}>{i18n.editProfile}</Button>}
+                                {!editProfile && (
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => setEditProfile(true)}
+                                    >
+                                        {i18n.editProfile}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </>
@@ -244,13 +335,24 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
             </div>
             {editProfile && (
                 <div style={{ paddingTop: '2rem' }}>
-                    <form onSubmit={handleEditProfile} style={{ display: 'flex', flexDirection: 'column' }}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '1rem',
-                        }}>
-                            <div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
+                    <form
+                        onSubmit={handleEditProfile}
+                        style={{ display: 'flex', flexDirection: 'column' }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    width: '100%',
+                                    gap: '1rem',
+                                }}
+                            >
                                 <div style={{ flex: 1 }}>
                                     <TextField
                                         label={i18n.nickname}
@@ -277,7 +379,13 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', width: '100%', gap: '1rem' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    width: '100%',
+                                    gap: '1rem',
+                                }}
+                            >
                                 <div style={{ flex: 1 }}>
                                     <Selector
                                         label={i18n.rank}
@@ -303,9 +411,23 @@ const ProfileSection = ({ userId, userInfos }: ProfileSectionProps) => {
                             </Text>
                         )}
 
-                        <div style={{ padding: '1.5rem 0', display: 'flex', gap: '1rem' }}>
-                            <Button fullWidth loading={loading}>{i18n.save}</Button>
-                            <Button variant='secondary' onClick={() => setEditProfile(false)} fullWidth>{i18n.cancel}</Button>
+                        <div
+                            style={{
+                                padding: '1.5rem 0',
+                                display: 'flex',
+                                gap: '1rem',
+                            }}
+                        >
+                            <Button fullWidth loading={loading}>
+                                {i18n.save}
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setEditProfile(false)}
+                                fullWidth
+                            >
+                                {i18n.cancel}
+                            </Button>
                         </div>
                     </form>
                 </div>

@@ -70,7 +70,9 @@ const Register = () => {
             return
         }
 
-        setSuccessMessage('Inscription réussie ! Vérifiez votre boîte mail pour confirmer votre compte.')
+        setSuccessMessage(
+            'Inscription réussie ! Vérifiez votre boîte mail pour confirmer votre compte.',
+        )
         setLoading(false)
     }
 
@@ -84,15 +86,22 @@ const Register = () => {
                 alignItems: 'center',
             }}
         >
-            <Card width='lg'>
-                <form onSubmit={handleEmailRegister} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>{i18n.register}</h2>
+            <Card width="lg">
+                <form
+                    onSubmit={handleEmailRegister}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
+                        {i18n.register}
+                    </h2>
 
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                    }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                        }}
+                    >
                         <TextField
                             label={i18n.email}
                             placeholder={i18n.emailPlaceholder}
@@ -133,9 +142,11 @@ const Register = () => {
                         </div>
                     )}
 
-                    <div style={{
-                        padding: '1.5rem 0'
-                    }}>
+                    <div
+                        style={{
+                            padding: '1.5rem 0',
+                        }}
+                    >
                         <Button variant="secondary" fullWidth loading={loading}>
                             {i18n.register}
                         </Button>
@@ -149,7 +160,10 @@ const Register = () => {
                     }}
                 >
                     <Text size="sm">
-                        Déjà un compte ? <Link to="/login">Connectez-vous ici</Link>
+                        Déjà un compte ?{' '}
+                        <Link to="/login" animated>
+                            Connectez-vous ici
+                        </Link>
                     </Text>
                 </div>
             </Card>

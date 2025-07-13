@@ -31,7 +31,7 @@ const properties: LanguageProperty[] = [
 ]
 
 export const handleUpdateLanguage = (code: string) => {
-    const propertie = properties.find(p => p.code === code)
+    const propertie = properties.find((p) => p.code === code)
     i18n.clear()
     i18n.addLang(propertie?.value || fr, 'default')
     i18n.init()

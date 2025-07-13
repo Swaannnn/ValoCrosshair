@@ -9,12 +9,17 @@
     font-family: 'VALORANT';
     font-style: normal;
     font-weight: 400;
-    src: local('VALORANT'), url('https://fonts.cdnfonts.com/s/37505/Valorant Font.woff') format('woff');
+    src: local('VALORANT'),
+    url('https://fonts.cdnfonts.com/s/37505/Valorant Font.woff') format('woff');
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes smoothProgress {
@@ -33,11 +38,11 @@
 }
 
 :root {
-    --blue-link: #007BFF;
+    --blue-link: #007bff;
 }
 
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .animated-link {
@@ -60,4 +65,8 @@ body {
 
 .animated-link:hover::after {
     width: 100%;
+}
+
+.no-animation {
+    text-decoration: none;
 }

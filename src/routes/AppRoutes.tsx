@@ -7,6 +7,7 @@ import { useSession } from '@hooks/auth/useSession'
 import Register from '@/pages/auth/Register.tsx'
 import ResetPassword from '@pages/auth/ResetPassword.tsx'
 import ResetPasswordConfirm from '@pages/auth/ResetPasswordConfirm.tsx'
+import Crosshairs from '@pages/Crosshairs.tsx'
 
 const AppRoutes = () => {
     const userId = useSession()
@@ -14,12 +15,21 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/crosshairs" element={<Crosshairs />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path='/resetPassword' element={<ResetPassword />} />
-            <Route path='/resetPasswordConfirm' element={<ResetPasswordConfirm />} />
-            <Route path="/account" element={userId ? <Account /> : <Navigate to="/login" replace />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route
+                path="/resetPasswordConfirm"
+                element={<ResetPasswordConfirm />}
+            />
+            <Route
+                path="/account"
+                element={
+                    userId ? <Account /> : <Navigate to="/login" replace />
+                }
+            />
         </Routes>
     )
 }

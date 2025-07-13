@@ -33,7 +33,7 @@ const ResetPassword = () => {
         setLoading(true)
 
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/resetPasswordConfirm`
+            redirectTo: `${window.location.origin}/resetPasswordConfirm`,
         })
 
         setLoading(false)
@@ -55,9 +55,14 @@ const ResetPassword = () => {
                 alignItems: 'center',
             }}
         >
-            <Card width='lg'>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>{i18n.resetPassword}</h2>
+            <Card width="lg">
+                <form
+                    onSubmit={handleSubmit}
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                    <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
+                        {i18n.resetPassword}
+                    </h2>
 
                     <TextField
                         label={i18n.email}
@@ -84,7 +89,6 @@ const ResetPassword = () => {
                             {i18n.sendResetPassword}
                         </Button>
                     </div>
-
                 </form>
             </Card>
         </div>

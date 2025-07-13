@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { supabase } from '@/lib/supabaseClient.ts'
 
-export const uploadToSupabase = async(
+export const uploadToSupabase = async (
     file: File,
     userId: string,
     type: 'avatar' | 'banner',
@@ -23,7 +23,10 @@ export const uploadToSupabase = async(
             .list(folderPrefix, { limit: 100 })
 
         if (listError) {
-            console.error('Erreur lors de la lecture du dossier Supabase:', listError)
+            console.error(
+                'Erreur lors de la lecture du dossier Supabase:',
+                listError,
+            )
         } else {
             const filesToDelete = list
                 .filter((file) => file.name.startsWith(type))
@@ -35,7 +38,10 @@ export const uploadToSupabase = async(
                     .remove(filesToDelete)
 
                 if (deleteError) {
-                    console.error('Erreur suppression ancienne(s) image(s):', deleteError)
+                    console.error(
+                        'Erreur suppression ancienne(s) image(s):',
+                        deleteError,
+                    )
                 }
             }
         }
@@ -73,7 +79,6 @@ export const uploadCrosshair = async (
         const fileName = `crosshair-${timestamp}.${ext}`
         const folderPrefix = `user-${userId}/`
         const filePath = `${folderPrefix}${fileName}`
-
 
         const { error: uploadError } = await supabase.storage
             .from('user-media')
